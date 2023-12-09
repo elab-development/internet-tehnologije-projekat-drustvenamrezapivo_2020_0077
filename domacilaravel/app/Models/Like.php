@@ -13,7 +13,7 @@ class Like extends Model
         'user_id','post_id','liker_id'
     ];
     public function liker(){
-        return $this->belongsTo(User::class,'user_id','liker_id');  
+        return $this->belongsTo(User::class,'liker_id','user_id');  
     }
     public function post(){
       

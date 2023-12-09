@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,5 +25,12 @@ Route::get('/comments/{user_id}/{post_id}/{comment_id}',[CommentController::clas
 Route::delete('/comments/{user_id}/{post_id}/{comment_id}',[CommentController::class,'destroy']);
 Route::post('/comments',[CommentController::class,'store']);
 Route::put('/comments/{user_id}/{post_id}/{comment_id}',[CommentController::class,'update']);
+
+
+Route::resource('/likes',LikeController::class);
+Route::get('/likes/{user_id}/{post_id}/{liker_id}',[LikeController::class,'show']);
+Route::delete('/likes/{user_id}/{post_id}/{liker_id}',[LikeController::class,'destroy']);
+Route::post('/likes',[LikeController::class,'store']);
+//Route::put('/likes/{user_id}/{post_id}/{liker_id}',[LikeController::class,'update']);
 
 

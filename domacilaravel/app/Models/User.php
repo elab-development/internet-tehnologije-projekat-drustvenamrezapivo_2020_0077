@@ -60,4 +60,8 @@ class User extends Authenticatable
     public function comments(){
         return $this->hasMany(Comment::class,'commentator_id','user_id');
     }
+
+    public function friends(){
+        return $this->hasMany(Friend::class,'user1_id','user_id');
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FriendshipController;
 use App\Http\Controllers\LikeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,5 +33,12 @@ Route::get('/likes/{user_id}/{post_id}/{liker_id}',[LikeController::class,'show'
 Route::delete('/likes/{user_id}/{post_id}/{liker_id}',[LikeController::class,'destroy']);
 Route::post('/likes',[LikeController::class,'store']);
 //Route::put('/likes/{user_id}/{post_id}/{liker_id}',[LikeController::class,'update']);
+
+
+Route::resource('/friendships',FriendshipController::class);
+Route::get('/friendships/{user1_id}/{user2_id}',[FriendshipController::class,'show']);
+Route::delete('/friendships/{user1_id}/{user2_id}',[FriendshipController::class,'destroy']);
+Route::post('/friendships',[FriendshipController::class,'store']);
+//Route::put('/friendships/{user1_id}/{user2_id}',[FriendshipController::class,'update']);
 
 

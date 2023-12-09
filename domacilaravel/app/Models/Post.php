@@ -27,6 +27,9 @@ class Post extends Model
               return $this->hasMany(Like::class,'post_id','post_id')->where('user_id','=',$this->user_id);
             
       
-       }
+   }
+   public function commentsOfPost(){
+    return $this->hasMany(Comment::class,'user_id','user_id')->where('post_id','=',$this->post_id);
+   }
     
 }

@@ -14,7 +14,7 @@ class Comment extends Model
     ];
 
     public function commentator(){
-        return $this->belongsTo(User::class,'user_id','commentator_id');  
+        return $this->belongsTo(User::class,'commentator_id','user_id');  
     }
     public function post(){
        

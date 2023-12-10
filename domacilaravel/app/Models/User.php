@@ -25,6 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'date_of_verification'
     ];
 
     /**
@@ -43,7 +44,7 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'date_of_verification' => 'datetime',
         
     ];
 
@@ -60,6 +61,6 @@ class User extends Authenticatable
     }
 
     public function friends(){
-        return $this->hasMany(Friend::class,'user_id','user1_id');
+        return $this->hasMany(Friendship::class,'user_id','user1_id');
     }
 }

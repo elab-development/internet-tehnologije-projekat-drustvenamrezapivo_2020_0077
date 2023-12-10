@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ParentPostResource;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
-        return ParentPostResource::collection($posts);
+        return PostResource::collection($posts);
     }
 
     /**

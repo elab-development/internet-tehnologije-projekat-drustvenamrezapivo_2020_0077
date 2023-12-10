@@ -3,6 +3,7 @@
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FriendshipController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -42,3 +43,8 @@ Route::post('/friendships',[FriendshipController::class,'store']);
 //Route::put('/friendships/{user1_id}/{user2_id}',[FriendshipController::class,'update']);
 
 
+Route::resource('/posts',PostController::class);
+Route::get('/posts/{user_id}/{post_id}',[PostController::class,'show']);
+Route::delete('/posts/{user_id}/{post_id}',[PostController::class,'destroy']);
+Route::post('/posts',[PostController::class,'store']);
+Route::put('posts/{user_id}/{post_id}',[PostController::class,'update']);

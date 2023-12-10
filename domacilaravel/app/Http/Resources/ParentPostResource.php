@@ -15,7 +15,8 @@ class ParentPostResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'title'=>$this->resource->title,
+           // 'title'=>$this->resource->title,
+           'location'=>$this->resource->location,
             'content'=>$this->resource->content,
             'image_path'=>$this->resource->image_path,
         ];

@@ -15,13 +15,14 @@ class PostResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'vlasnik posta'=>new OwnerResource($this->resource->user),
-            'location'=>$this->resource->location,
-            'content'=>$this->resource->content,
-            'image_path'=>$this->resource->image_path,
-            'created_at'=>$this->resource->created_at,
-             'likes'=>LikeResource::collection($this->resource->likesOfPost),
-             'comments'=>CommentResource::collection($this->resource->commentsOfPost),
+            //'vlasnik posta'=>new OwnerResource($this->resource->user),
+            'owner' => $this->resource->user,
+            'location' => $this->resource->location,
+            'content' => $this->resource->content,
+            'image_path' => $this->resource->image_path,
+            'created_at' => $this->resource->created_at,
+            'likes' => LikeResource::collection($this->resource->likesOfPost),
+            'comments' => CommentResource::collection($this->resource->commentsOfPost),
         ];
     }
 }

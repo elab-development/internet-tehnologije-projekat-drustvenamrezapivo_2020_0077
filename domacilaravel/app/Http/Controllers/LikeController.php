@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\LikeResource;
 use App\Models\Like;
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -40,28 +42,32 @@ class LikeController extends Controller
     public function store(Request $request)
     {
         //
-       
 
-        $validator=Validator::make($request->all(),[
-           
-            'user_id'=>'required',
-            'post_id'=>'required',
-            'liker_id'=>'required',
-           
-       ]);
-       if ($validator->fails())
-       return response()->json($validator->errors());
-       
 
-       $post=Like::create([
-           
-          
-           'user_id'=>$request->user_id,
-           'post_id'=>$request->post_id,
-           'liker_id'=>$request->liker_id,
-       ]);
-     
-       return response()->json(['Like posta successfully created',$post]);
+        $validator = Validator::make($request->all(), [
+
+            'user_id' => 'required',
+            'post_id' => 'required',
+            'liker_id' => 'required',
+
+        ]);
+        if ($validator->fails())
+            return response()->json($validator->errors());
+
+        $post = Post::where('user_id', $request->user_id)->where('post_id', $request->post_id)->first();
+        $user = User::where('user_id', $request->liker_id)->first();
+        if (!$post || !$user) {
+            return response()->json(["message" => 'los unos']);
+        }
+        $post = Like::create([
+
+
+            'user_id' => $request->user_id,
+            'post_id' => $request->post_id,
+            'liker_id' => $request->liker_id,
+        ]);
+
+        return response()->json(['Like posta successfully created', $post]);
     }
 
     /**
@@ -70,12 +76,12 @@ class LikeController extends Controller
      * @param  \App\Models\Like  $like
      * @return \Illuminate\Http\Response
      */
-    public function show($user_id,$post_id,$liker_id)
+    public function show($user_id, $post_id, $liker_id)
     {
         //
-        $likePost=Like::where('user_id',$user_id)->where('post_id',$post_id)->where('liker_id',$liker_id)->first();
-        if(is_null($likePost)){
-            return response()->json('Data not found',404);
+        $likePost = Like::where('user_id', $user_id)->where('post_id', $post_id)->where('liker_id', $liker_id)->first();
+        if (is_null($likePost)) {
+            return response()->json('Data not found', 404);
         }
         return new LikeResource($likePost);
     }
@@ -98,7 +104,7 @@ class LikeController extends Controller
      * @param  \App\Models\Like  $like
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $user_id,$post_id,$liker_id)
+    public function update(Request $request, $user_id, $post_id, $liker_id)
     {
         // Imamo implementaciju u slucaju da zelimo sve da izmenimo, ali nam to deluje nelogicno
     }
@@ -109,14 +115,16 @@ class LikeController extends Controller
      * @param  \App\Models\Like  $like
      * @return \Illuminate\Http\Response
      */
-    public function destroy($user_id,$post_id,$liker_id)
+    public function destroy($user_id, $post_id, $liker_id)
     {
         //
-        $likePost=Like::where('user_id',$user_id)->where('post_id',$post_id)->where('liker_id',$liker_id);
-        if(is_null($likePost)){
+        $likePost = Like::where('user_id', $user_id)->where('post_id', $post_id)->where('liker_id', $liker_id)->first();
+        if (!$likePost) {
             return response()->json('Data not found', 404);
         }
-        $likePost->delete();
-        return response()->json(['message' => 'Like suscesfully deleted']);
+        // return $likePost;
+        // $likePost->delete();
+        Like::where('user_id', $user_id)->where('post_id', $post_id)->where('liker_id', $liker_id)->delete();
+        return response()->json(['message' => 'Like suscesfully deleted', 'likepost' => $likePost]);
     }
 }

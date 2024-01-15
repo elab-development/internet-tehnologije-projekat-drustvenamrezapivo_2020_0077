@@ -16,9 +16,10 @@ class LikeResource extends JsonResource
     {
         return [
 
-           'liker'=>new LikerResource($this->resource->liker),
-           'post'=>new ParentPostResource($this->resource->post),
-           'created_at'=>$this->resource->created_at
+            //'liker' => new LikerResource($this->resource->liker),
+            'liker' => $this->resource->liker,
+            'post' => new ParentPostResource($this->resource->post),
+            'created_at' => $this->resource->created_at
         ];
     }
 }

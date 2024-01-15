@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\FriendResource;
 use App\Http\Resources\FriendShipsResource;
 use App\Models\Friendship;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -19,7 +20,7 @@ class FriendshipController extends Controller
     public function index()
     {
         //
-        $friendships=Friendship::all();
+        $friendships = Friendship::all();
 
         return FriendshipsResource::collection($friendships);
     }
@@ -43,31 +44,38 @@ class FriendshipController extends Controller
     public function store(Request $request)
     {
         //
-        $validator=Validator::make($request->all(),[
-           
-            'user1_id'=>'required',
-            'user2_id'=>'required',
-            
-       ]);
-       if ($validator->fails())
-       return response()->json($validator->errors());
-      
-    
-       $friend1=Friendship::create([
-        
-           'user1_id'=>$request->user1_id,
-           'user2_id'=>$request->user2_id,
-           
-           
-       ]);
-       $friend2=Friendship::create([
-        'user2_id'=>$request->user1_id,
-        'user1_id'=>$request->user2_id,
-       
-        
-    ]);
-      
-       return response()->json(['Friendship successfully created',$friend1,$friend2]);
+        $validator = Validator::make($request->all(), [
+
+            'user1_id' => 'required',
+            'user2_id' => 'required',
+
+        ]);
+        if ($validator->fails())
+            return response()->json($validator->errors());
+
+
+        $user1 = User::where('user_id', $request->user1_id)->first();
+        $user2 = User::where('user_id', $request->user2_id)->first();
+
+        if (!$user1 || !$user2) {
+            return response()->json(['message' => 'pogresan unos']);
+        }
+
+        $friend1 = Friendship::create([
+
+            'user1_id' => $request->user1_id,
+            'user2_id' => $request->user2_id,
+
+
+        ]);
+        $friend2 = Friendship::create([
+            'user2_id' => $request->user1_id,
+            'user1_id' => $request->user2_id,
+
+
+        ]);
+
+        return response()->json(['Friendship successfully created', $friend1, $friend2]);
     }
 
     /**
@@ -76,15 +84,39 @@ class FriendshipController extends Controller
      * @param  \App\Models\Friendship  $friendship
      * @return \Illuminate\Http\Response
      */
-    public function show($user1_id,$user2_id)
+    public function friends($user1_id, $user2_id)
     {
         //
-        $likePost=Friendship::where('user1_id',$user1_id)->where('user2_id',$user2_id)->first();
-        if(is_null($likePost)){
-            return response()->json('Data not found',404);
+        $friendship = Friendship::where('user1_id', $user1_id)->where('user2_id', $user2_id)->first();
+        if (is_null($friendship)) {
+            return response()->json('Data not found', 404);
         }
-        return new FriendshipsResource($likePost);
+        return new FriendshipsResource($friendship);
     }
+    public function show($user1_id)
+    {
+        $user = User::where('user_id', $user1_id)->first();
+        if (!$user) {
+            return response()->json(['message' => 'ne postoji takav korisnik']);
+        }
+        //
+        //return $user1_id;
+        $friends = Friendship::where('user1_id', $user1_id)->get();
+
+
+        $povratni = [];
+
+        foreach ($friends as $friend) {
+
+            $user = User::where('user_id', $friend->user2_id)->first();
+            $povratni = [...$povratni, $user];
+        }
+
+
+
+        return response()->json(['friends' => $povratni], 200);
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -104,10 +136,10 @@ class FriendshipController extends Controller
      * @param  \App\Models\Friendship  $friendship
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $user1_id,$user2_id)
+    public function update(Request $request, $user1_id, $user2_id)
     {
         //imamo implemntaciju za izmenu svega ali nam nije logicno da postoji ikakva izmena tako da ostavljamo neimplementiranu funkciju
-        
+
     }
 
 
@@ -117,17 +149,19 @@ class FriendshipController extends Controller
      * @param  \App\Models\Friendship  $friendship
      * @return \Illuminate\Http\Response
      */
-    public function destroy($user1_id,$user2_id)
+    public function destroy($user1_id, $user2_id)
     {
         //
-        $likePost=Friendship::where('user1_id',$user1_id)->where('user2_id',$user2_id);
-        if(is_null($likePost)){
+        $friendship = Friendship::where('user1_id', $user1_id)->where('user2_id', $user2_id)->first();
+        if (!$friendship) {
             return response()->json('Data not found', 404);
         }
-        $likePost->delete();
+        // $friendship->delete();
+        Friendship::where('user1_id', $user1_id)->where('user2_id', $user2_id)->delete();
+        Friendship::where('user1_id', $user2_id)->where('user2_id', $user1_id)->delete();
+        // $friendship = Friendship::where('user1_id', $user2_id)->where('user2_id', $user1_id);
+        // $friendship->delete();
 
-        $likePost=Friendship::where('user1_id',$user2_id)->where('user2_id',$user1_id);
-        $likePost->delete();
         return response()->json(['message' => 'Friendship suscesfully deleted']);
     }
 }

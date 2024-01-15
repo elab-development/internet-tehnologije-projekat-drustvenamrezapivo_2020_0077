@@ -15,10 +15,11 @@ class CommentResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'commentator'=>new CommentatorResource($this->resource->commentator),
-            'post'=>new ParentPostResource($this->resource->post),
-            'content'=>$this->resource->content,
-            'created_at'=>$this->resource->created_at,
+            'commentator' => new CommentatorResource($this->resource->commentator),
+            // 'commentator' => $this->resource->commentator,
+            'post' => new ParentPostResource($this->resource->post),
+            'content' => $this->resource->content,
+            'created_at' => $this->resource->created_at,
 
         ];
     }

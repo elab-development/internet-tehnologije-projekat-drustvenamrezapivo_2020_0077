@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\CommentResource;
 use App\Models\Comment;
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -18,7 +20,7 @@ class CommentController extends Controller
     public function index()
     {
         //
-        $comments=Comment::all();
+        $comments = Comment::all();
         //return $comments;
         return CommentResource::collection($comments);
     }
@@ -42,41 +44,46 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         //
-        $validator=Validator::make($request->all(),[
-           
-            'user_id'=>'required',
-            'post_id'=>'required',
-            'commentator_id'=>'required',
-            'content'=>'required|string|max:255'
-            
-       ]);
-       if ($validator->fails())
-       return response()->json($validator->errors());
-       
-      
-    
-       $controller=new CommentController();
-       $comment_id=$controller->pomocna($request->user_id,$request->post_id);
-       $comment=Comment::create([
-           
+        $validator = Validator::make($request->all(), [
 
-           'user_id'=>$request->user_id,
-           'post_id'=>$request->post_id,
-           'comment_id'=>$comment_id,
-           
-           'commentator_id'=>$request->commentator_id,
-           'content'=>$request->content,
-       ]);
-       //vracamo podatke
-       return response()->json(['comment successfully created',$comment]);
+            'user_id' => 'required',
+            'post_id' => 'required',
+            'commentator_id' => 'required',
+            'content' => 'required|string|max:255'
+
+        ]);
+        if ($validator->fails())
+            return response()->json($validator->errors());
+
+        $post = Post::where('user_id', $request->user_id)->where('post_id', $request->post_id)->first();
+        $user = User::where('user_id', $request->commentator_id)->first();
+
+        if (!$post || !$user) {
+            return response()->json(["message" => "wrong parametars"]);
+        }
+
+        $controller = new CommentController();
+        $comment_id = $controller->pomocna($request->user_id, $request->post_id);
+        $comment = Comment::create([
+
+
+            'user_id' => $request->user_id,
+            'post_id' => $request->post_id,
+            'comment_id' => $comment_id,
+
+            'commentator_id' => $request->commentator_id,
+            'content' => $request->content,
+        ]);
+        //vracamo podatke
+        return response()->json(['comment successfully created', $comment]);
     }
-    function pomocna($user_id,$post_id) :int
+    function pomocna($user_id, $post_id): int
     {
         $comments = Comment::where([
             ['user_id', '=', $user_id],
             ['post_id', '=', $post_id],
         ])->get();
-        $commentId=$comments->max('comment_id')+1;
+        $commentId = $comments->max('comment_id') + 1;
         return $commentId;
     }
 
@@ -86,14 +93,14 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show($user_id,$post_id,$comment_id)
+    public function show($user_id, $post_id, $comment_id)
     {
         //
-        $comment=Comment::where('user_id',$user_id)->where('post_id',$post_id)->where('comment_id',$comment_id)->first();
-        if(is_null($comment)){
-            return response()->json('Data not found',404);
+        $comment = Comment::where('user_id', $user_id)->where('post_id', $post_id)->where('comment_id', $comment_id)->first();
+        if (is_null($comment)) {
+            return response()->json('Data not found', 404);
         }
-        return $comment;
+        return response()->json(['comment' => $comment, 'success' => true]);
     }
 
     /**
@@ -114,45 +121,47 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $user_id,$post_id,$comment_id)
+    public function update(Request $request, $user_id, $post_id, $comment_id)
     {
         //
         $validator = Validator::make($request->all(), [
 
-             //'user_id' => 'required',
-              //'post_id' => 'required', 
-              //'comment_id'=>'required',
-              //'commentator_id'=>'required',
-              'content'=>'required|string|max:255'
-          ]);
-  
-          if ($validator->fails()) {
-              return response()->json($validator->errors(), 400);
-          }
-          
+            //'user_id' => 'required',
+            //'post_id' => 'required', 
+            //'comment_id'=>'required',
+            //'commentator_id'=>'required',
+            'content' => 'required|string|max:255'
+        ]);
 
-          
-          $comment= Comment::where('user_id',$user_id)->where('post_id',$post_id)->where('comment_id',$comment_id)->first();
-          if (!$comment) {
-              return response()->json(['message' => 'comment not found'], 404);
-          }
-          
-  
-          DB::update("
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+
+
+
+
+        $comment = Comment::where('user_id', $user_id)->where('post_id', $post_id)->where('comment_id', $comment_id)->first();
+        if (!$comment) {
+            return response()->json(['message' => 'comment not found'], 404);
+        }
+
+
+        DB::update("
           UPDATE comments
           SET content=?
           WHERE user_id = ? AND post_id = ? AND comment_id=?
       ", [
-          
-          $request->content,
-          $user_id,
-          $post_id,
-          $comment_id,
 
-      ]);
-         
-          $comment=Comment::where('user_id',$request->user_id)->where('post_id',$request->post_id)->where('comment_id',$request->comment_id)->get();
-          return response()->json(['data' => $comment, 'message' => 'comment sucesfully updated']);
+            $request->content,
+            $user_id,
+            $post_id,
+            $comment_id,
+
+        ]);
+
+        $comment = Comment::where('user_id', $request->user_id)->where('post_id', $request->post_id)->where('comment_id', $request->comment_id)->get();
+        return response()->json(['data' => $comment, 'message' => 'comment sucesfully updated']);
     }
 
     /**
@@ -161,14 +170,14 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($user_id,$post_id,$comment_id)
+    public function destroy($user_id, $post_id, $comment_id)
     {
         //
-        $comment=Comment::where('user_id',$user_id)->where('post_id',$post_id)->where('comment_id',$comment_id);
-        if(is_null($comment)){
+        $comment = Comment::where('user_id', $user_id)->where('post_id', $post_id)->where('comment_id', $comment_id)->first();
+        if (!$comment) {
             return response()->json('Data not found', 404);
         }
-        $comment->delete();
-        return response()->json(['message' => 'Post suscesfully deleted']);
+        Comment::where('user_id', $user_id)->where('post_id', $post_id)->where('comment_id', $comment_id)->delete();
+        return response()->json(['message' => 'comment suscesfully deleted']);
     }
 }

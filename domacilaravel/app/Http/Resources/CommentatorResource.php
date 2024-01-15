@@ -15,8 +15,10 @@ class CommentatorResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'name'=>$this->resource->name,
-            'email'=>$this->resource->email,
+            'user_id' => $this->resource->user_id,
+            'name' => $this->resource->name,
+            'email' => $this->resource->email,
+            'about' => $this->resource->about,
         ];
     }
 }

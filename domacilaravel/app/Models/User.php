@@ -25,7 +25,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'date_of_verification'
+        'date_of_verification',
+        'about',
+        'picture',
     ];
 
     /**
@@ -45,22 +47,26 @@ class User extends Authenticatable
      */
     protected $casts = [
         'date_of_verification' => 'datetime',
-        
+
     ];
 
-    public function posts(){
-        return $this->hasMany(Post::class,'user_id','user_id');
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'user_id', 'user_id');
     }
 
-    public function likedPosts(){
-        return $this->hasMany(Like::class,'user_id','liker_id');
+    public function likedPosts()
+    {
+        return $this->hasMany(Like::class, 'user_id', 'liker_id');
     }
 
-    public function comments(){
-        return $this->hasMany(Comment::class,'user_id','commentator_id');
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'user_id', 'commentator_id');
     }
 
-    public function friends(){
-        return $this->hasMany(Friendship::class,'user_id','user1_id');
+    public function friends()
+    {
+        return $this->hasMany(Friendship::class, 'user_id', 'user1_id');
     }
 }

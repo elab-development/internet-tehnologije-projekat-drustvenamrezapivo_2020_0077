@@ -29,12 +29,12 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
         if ($user) {
-            return response()->json(['success' => false, 'message' => 'vec postoji taj email']);
+            return response()->json(['success' => false, 'message' => 'vec postoji taj email'],400); //OVDE
         }
 
         if ($validator->fails())
             //return response()->json($validator->errors());
-            return response()->json(['success' => false, 'message' => 'los unos', 'validator-errors' => $validator->errors()]);
+            return response()->json(['success' => false, 'message' => 'los unos', 'validator-errors' => $validator->errors()],422); //OVDE
 
 
         $user = User::create([
@@ -49,7 +49,7 @@ class AuthController extends Controller
 
 
 
-        return response()->json(['success' => true, 'data' => $user, 'access_token' => $token, 'token_type' => 'Bearer']);
+        return response()->json(['success' => true, 'data' => $user, 'access_token' => $token, 'token_type' => 'Bearer', 'message'=> 'Successful registration'],201); //OVDE
     }
 
     public function login(Request $request)
@@ -60,12 +60,12 @@ class AuthController extends Controller
             'password' => 'required|string|min:8',
         ]);
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'validator-errors' => $validator->errors()]);
+            return response()->json(['success' => false, 'validator-errors' => $validator->errors(),'message'=>'Validation failed'],422); //OVDE
         }
 
         if (!Auth::attempt($request->only('email', 'password')))
             // return response()->json(['message'=>'Unautorized'],401);staro
-            return response()->json(['success' => false, 'message' => 'dont exists user like this']); //novo
+            return response()->json(['success' => false, 'message' => 'dont exists user like this'],400); //novo
 
         $user = User::where('email', $request->email)->firstOrFail();
 
@@ -91,13 +91,13 @@ class AuthController extends Controller
         }
 
         //return response()->json(['data' => $user, 'access_token' => $token, 'token_type' => 'Bearer']); staro
-        return response()->json(['success' => true, 'user' => $user, 'access_token' => $token, 'token_type' => 'Bearer']); //novo
+        return response()->json(['success' => true, 'user' => $user, 'access_token' => $token, 'token_type' => 'Bearer', 'message' => 'User successfully logged in'],200); //novo
     }
 
     public function logout(Request $request)
     {
         // return $request;
         $request->user()->tokens()->delete();
-        return response()->json(['success' => true, 'message' => 'user succesfully logout']);
+        return response()->json(['success' => true, 'message' => 'user succesfully logged out'],204); //OVDE
     }
 }

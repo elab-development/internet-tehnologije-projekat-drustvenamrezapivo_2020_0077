@@ -23,6 +23,10 @@ class CommentController extends Controller
         $comments = Comment::all();
         //return $comments;
         return CommentResource::collection($comments);
+
+        //OVDE OK?
+
+        
     }
 
     /**
@@ -53,13 +57,13 @@ class CommentController extends Controller
 
         ]);
         if ($validator->fails())
-            return response()->json($validator->errors());
+            return response()->json(['message' => 'Validation failed', 'errors'=>$validator->errors()],422); ////OVDE
 
         $post = Post::where('user_id', $request->user_id)->where('post_id', $request->post_id)->first();
         $user = User::where('user_id', $request->commentator_id)->first();
 
         if (!$post || !$user) {
-            return response()->json(["message" => "wrong parametars"]);
+            return response()->json(['message' => 'wrong parameters'],404); //OVDE STAVIO
         }
 
         $controller = new CommentController();
@@ -75,7 +79,7 @@ class CommentController extends Controller
             'content' => $request->content,
         ]);
         //vracamo podatke
-        return response()->json(['comment successfully created', $comment]);
+        return response()->json(['comment successfully created', $comment],201); //OVDE STAVIO
     }
     function pomocna($user_id, $post_id): int
     {
@@ -98,9 +102,9 @@ class CommentController extends Controller
         //
         $comment = Comment::where('user_id', $user_id)->where('post_id', $post_id)->where('comment_id', $comment_id)->first();
         if (is_null($comment)) {
-            return response()->json('Data not found', 404);
+            return response()->json(['message'=> 'Data not found'], 404); // OVDE STAVIO
         }
-        return response()->json(['comment' => $comment, 'success' => true]);
+        return response()->json(['comment' => $comment, 'success' => true, 'message' => 'Comment successfully retrieved'],200); // OVDE STAVIO
     }
 
     /**
@@ -134,7 +138,7 @@ class CommentController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json(['message' => 'Validation failed', 'errors'=>$validator->errors()],422);
         }
 
 
@@ -143,7 +147,7 @@ class CommentController extends Controller
 
         $comment = Comment::where('user_id', $user_id)->where('post_id', $post_id)->where('comment_id', $comment_id)->first();
         if (!$comment) {
-            return response()->json(['message' => 'comment not found'], 404);
+            return response()->json(['message' => 'comment not found'], 404); // OK
         }
 
 
@@ -161,7 +165,7 @@ class CommentController extends Controller
         ]);
 
         $comment = Comment::where('user_id', $request->user_id)->where('post_id', $request->post_id)->where('comment_id', $request->comment_id)->get();
-        return response()->json(['data' => $comment, 'message' => 'comment sucesfully updated']);
+        return response()->json(['data' => $comment, 'message' => 'comment sucesfully updated'],201); //OVDE
     }
 
     /**
@@ -175,9 +179,9 @@ class CommentController extends Controller
         //
         $comment = Comment::where('user_id', $user_id)->where('post_id', $post_id)->where('comment_id', $comment_id)->first();
         if (!$comment) {
-            return response()->json('Data not found', 404);
+            return response()->json(['message' => 'Data not found'], 404); // OVDE
         }
         Comment::where('user_id', $user_id)->where('post_id', $post_id)->where('comment_id', $comment_id)->delete();
-        return response()->json(['message' => 'comment suscesfully deleted']);
+        return response()->json(['message' => 'comment suscesfully deleted'], 200); //OVDE
     }
 }

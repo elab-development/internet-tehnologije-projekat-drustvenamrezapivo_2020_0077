@@ -23,6 +23,8 @@ class FriendshipController extends Controller
         $friendships = Friendship::all();
 
         return FriendshipsResource::collection($friendships);
+
+         // OVDE OKEJ?
     }
 
     /**
@@ -51,14 +53,14 @@ class FriendshipController extends Controller
 
         ]);
         if ($validator->fails())
-            return response()->json($validator->errors());
+        return response()->json(['message' => 'Validation failed', 'errors'=>$validator->errors()],422); //OVDE
 
 
         $user1 = User::where('user_id', $request->user1_id)->first();
         $user2 = User::where('user_id', $request->user2_id)->first();
 
         if (!$user1 || !$user2) {
-            return response()->json(['message' => 'pogresan unos']);
+            return response()->json(['message' => 'pogresan unos'],404); //OVDE
         }
 
         $friend1 = Friendship::create([
@@ -75,7 +77,7 @@ class FriendshipController extends Controller
 
         ]);
 
-        return response()->json(['Friendship successfully created', $friend1, $friend2]);
+        return response()->json(['message' => 'Friendship successfully created', 'Friend 1' => $friend1, 'Friend 2' => $friend2],201); //OVDE
     }
 
     /**
@@ -89,7 +91,7 @@ class FriendshipController extends Controller
         //
         $friendship = Friendship::where('user1_id', $user1_id)->where('user2_id', $user2_id)->first();
         if (is_null($friendship)) {
-            return response()->json('Data not found', 404);
+            return response()->json(['message'=>'Data not found'], 404); //OVDE
         }
         return new FriendshipsResource($friendship);
     }
@@ -97,7 +99,7 @@ class FriendshipController extends Controller
     {
         $user = User::where('user_id', $user1_id)->first();
         if (!$user) {
-            return response()->json(['message' => 'ne postoji takav korisnik']);
+            return response()->json(['message' => 'ne postoji takav korisnik'],404); //OVDE
         }
         //
         //return $user1_id;
@@ -114,7 +116,7 @@ class FriendshipController extends Controller
 
 
 
-        return response()->json(['friends' => $povratni], 200);
+        return response()->json(['message'=>'Friends retrieved succesfully','friends' => $povratni], 200); //OVDE 
     }
 
 
@@ -154,7 +156,7 @@ class FriendshipController extends Controller
         //
         $friendship = Friendship::where('user1_id', $user1_id)->where('user2_id', $user2_id)->first();
         if (!$friendship) {
-            return response()->json('Data not found', 404);
+            return response()->json(['message'=>'Data not found'], 404);
         }
         // $friendship->delete();
         Friendship::where('user1_id', $user1_id)->where('user2_id', $user2_id)->delete();
@@ -162,6 +164,6 @@ class FriendshipController extends Controller
         // $friendship = Friendship::where('user1_id', $user2_id)->where('user2_id', $user1_id);
         // $friendship->delete();
 
-        return response()->json(['message' => 'Friendship suscesfully deleted']);
+        return response()->json(['message' => 'Friendship suscesfully deleted'],200); //OVDE
     }
 }

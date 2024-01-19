@@ -21,6 +21,8 @@ class LikeController extends Controller
     {
         $likes = Like::all();
         return LikeResource::collection($likes);
+
+        //OK ZBOG RESURSA
     }
 
     /**
@@ -52,12 +54,12 @@ class LikeController extends Controller
 
         ]);
         if ($validator->fails())
-            return response()->json($validator->errors());
+        return response()->json(['message' => 'Validation failed', 'errors'=>$validator->errors()],422); //OVDE
 
         $post = Post::where('user_id', $request->user_id)->where('post_id', $request->post_id)->first();
         $user = User::where('user_id', $request->liker_id)->first();
         if (!$post || !$user) {
-            return response()->json(["message" => 'los unos']);
+            return response()->json(["message" => 'los unos'],404); //OVDE
         }
         $post = Like::create([
 
@@ -67,7 +69,7 @@ class LikeController extends Controller
             'liker_id' => $request->liker_id,
         ]);
 
-        return response()->json(['Like posta successfully created', $post]);
+        return response()->json(['message' => 'Like of post successfully created', 'Post' => $post],201); //OVDE
     }
 
     /**
@@ -81,7 +83,7 @@ class LikeController extends Controller
         //
         $likePost = Like::where('user_id', $user_id)->where('post_id', $post_id)->where('liker_id', $liker_id)->first();
         if (is_null($likePost)) {
-            return response()->json('Data not found', 404);
+            return response()->json(['message'=>'Data not found'], 404); //OVDE
         }
         return new LikeResource($likePost);
     }
@@ -120,11 +122,11 @@ class LikeController extends Controller
         //
         $likePost = Like::where('user_id', $user_id)->where('post_id', $post_id)->where('liker_id', $liker_id)->first();
         if (!$likePost) {
-            return response()->json('Data not found', 404);
+            return response()->json(['message'=>'Data not found'], 404); //OVDE
         }
         // return $likePost;
         // $likePost->delete();
         Like::where('user_id', $user_id)->where('post_id', $post_id)->where('liker_id', $liker_id)->delete();
-        return response()->json(['message' => 'Like suscesfully deleted', 'likepost' => $likePost]);
+        return response()->json(['message' => 'Like suscesfully deleted', 'likepost' => $likePost],200); //OVDE
     }
 }

@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 import { Modal, Form } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';  //!!!!!
 import { useParams } from 'react-router-dom';
+import ButtonSeeProfile from './ButtonSeeProfile';
 
  
 function ProfilPage({renderAll,setRenderAll}) {
@@ -132,6 +133,11 @@ function ProfilPage({renderAll,setRenderAll}) {
   return (
     <section className="h-100 gradient-custom-2">
      
+   
+{user && window.sessionStorage.user_id!=user.user_id  ?
+       <>
+       <ButtonSeeProfile user_id={window.sessionStorage.user_id} name={"Return to your profile"}/>
+      </>:  <></>}
      
   <div className="container py-5 h-100">
     <div className="row d-flex justify-content-center align-items-center h-100">

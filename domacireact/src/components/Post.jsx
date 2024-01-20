@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button,Row,Col } from 'react-bootstrap';
 import axios from 'axios';
+import ButtonSeeProfile from './ButtonSeeProfile';
 
 import { useLocation } from 'react-router-dom';
 
@@ -146,6 +147,7 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
       
       <div className='post-info'>
         
+      {location.pathname.startsWith('/explore/') || location.pathname.startsWith('/posts/')? <><ButtonSeeProfile user_id={post.user_id} name={post.user.name}/></>: <></>}
    
         </div>
         
@@ -196,7 +198,7 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
           <Row>
             <Col sm={3}>
               
-              <p>{comment.commentator.name}</p>
+            <ButtonSeeProfile handleCloseDetails={handleCloseDetails} user_id={comment.commentator.user_id} name={comment.commentator.name}></ButtonSeeProfile>
             </Col>
             
             <Col sm={9}>
@@ -216,7 +218,8 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
       <p className="text-success">Likes:</p>
       {post.likes.map((like) => (
         
-        <p>{like.liker.name}</p>
+       
+        <ButtonSeeProfile handleCloseDetails={handleCloseDetails} user_id={like.liker.user_id} name={like.liker.name}/>
         
       ))}
     </div>

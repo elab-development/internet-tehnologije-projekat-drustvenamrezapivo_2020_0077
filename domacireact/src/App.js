@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProfilPage
  from './components/ProfilPage';
+ import PostsPage from './components/PostsPage';
 
 
 function App() {
@@ -67,9 +68,9 @@ function App() {
         <Route path='/editprofile' element={<></>}/>
         <Route path='/' element={<NavBar logout={logout}/>}>
           
-        <Route path='profile/:user_id' element={<><ProfilPage renderAll={renderAll} setRenderAll={setRenderAll}></ProfilPage></>}/>
-        <Route path='posts/:user_id' element={<></>}/>
-        <Route path='explore/:user_id' element={<></>}/>
+        <Route path='profile/:user_id' element={<><ProfilPage renderAll={renderAll} setRenderAll={setRenderAll}></ProfilPage><PostsPage  renderAll={renderAll} setRenderAll={setRenderAll} /></>}/>
+        <Route path='posts/:user_id' element={<PostsPage  />}/>
+        <Route path='explore/:user_id' element={<PostsPage  />}/>
         </Route>
       </Routes>
   );

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import useWindowWidth from './useWindowWidth';
 
 
 
@@ -12,6 +13,7 @@ function PostsPage({renderAll,setRenderAll}) {
   console.log("postsPage render");
   const location = useLocation();
   const params=useParams();
+  const currentWindowWidth = useWindowWidth();
 
   const [azurirajPosts, setAzurirajPosts] = useState(false);
 
@@ -81,7 +83,7 @@ function PostsPage({renderAll,setRenderAll}) {
   return (
 
     <div className="container" style={{ textAlign: 'center' }}>
-    
+    <p>Trenutna širina prozora: {currentWindowWidth}px</p>
    
     <h1>{location.pathname.startsWith('/explore') ? 'Posts of unfriends' : ''}</h1>
     <h1>{location.pathname.startsWith('/profile') ? 'Posts of profile' : ''}</h1>

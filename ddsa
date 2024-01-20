@@ -1,0 +1,29 @@
+[33mcommit e6eafda870f44386470a12cdecbae8f3d7e95f83[m[33m ([m[1;36mHEAD -> [m[1;32mpomocna[m[33m)[m
+Author: Djordje Djordjevic <dd20200077@student.fon.bg.ac.rs>
+Date:   Sat Dec 9 19:46:04 2023 +0100
+
+    Dodavanje post modela,njegovog seedera i njegove migracije,izmena DatabaseSeedera,users migracije,user modela
+
+[33mcommit ecede912b73493f1fcc0b1de5d09727cf9bcf0df[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: Ranko Divac <rd20211043@student.fon.bg.ac.rs>
+Date:   Sat Dec 9 18:29:16 2023 +0100
+
+    Initializing laravel
+
+[33mcommit 87d0d0424d26148557e48aaa3f617a8fd6b07ef6[m
+Author: github-classroom[bot] <66690702+github-classroom[bot]@users.noreply.github.com>
+Date:   Sat Dec 9 13:57:49 2023 +0000
+
+    add deadline
+
+[33mcommit 0c340aea97215a324538e245b3a7e351610a35a8[m
+Author: github-classroom[bot] <66690702+github-classroom[bot]@users.noreply.github.com>
+Date:   Sat Dec 9 13:57:46 2023 +0000
+
+    Setting up GitHub Classroom Feedback
+
+[33mcommit 7f29527bd2c02cea2626fcd49df686487791a088[m[33m ([m[1;31morigin/feedback[m[33m)[m
+Author: github-classroom[bot] <66690702+github-classroom[bot]@users.noreply.github.com>
+Date:   Sat Dec 9 13:57:46 2023 +0000
+
+    GitHub Classroom Feedback

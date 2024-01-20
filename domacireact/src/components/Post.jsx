@@ -4,6 +4,7 @@ import axios from 'axios';
 import ButtonSeeProfile from './ButtonSeeProfile';
 import ButtonDeletePost from './ButtonDeletePost';
 import ButtonFollow from './ButtonFollow';
+import ButtonUnfollow from './ButtonUnfollow';
 
 import { useLocation } from 'react-router-dom';
 
@@ -152,6 +153,7 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
       {location.pathname.startsWith('/explore/') || location.pathname.startsWith('/posts/')? <><ButtonSeeProfile user_id={post.user_id} name={post.user.name}/></>: <></>}
    
       {location.pathname.startsWith('/explore/')? <><ButtonFollow azurirajPosts={azurirajPosts} setAzurirajPosts={setAzurirajPosts}  pozicija={"posts"} user_id={post.user_id}/></>: ""}
+      {location.pathname.startsWith('/posts/')? <><ButtonUnfollow azurirajPosts={azurirajPosts} setAzurirajPosts={setAzurirajPosts} pozicija={"posts"} user_id={post.user_id}/></> : ""}
        
         </div>
         

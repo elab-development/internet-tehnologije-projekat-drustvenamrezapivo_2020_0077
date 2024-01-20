@@ -5,6 +5,7 @@ import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 
@@ -37,10 +38,15 @@ function App() {
    
   }
 
+
+  
+
   return (
    <Routes>
         <Route path="/login" element={<LoginPage addToken={addToken} />} />
         <Route path="/register" element={<RegisterPage />} />
+       
+
         
       </Routes>
   );

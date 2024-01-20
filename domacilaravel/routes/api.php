@@ -53,7 +53,7 @@ Route::get('/likes/{user_id}/{post_id}/{liker_id}', [LikeController::class, 'sho
 //Route::resource('/friendships', FriendshipController::class);
 // Route::get('/friendships/{user1_id}/{user2_id}', [FriendshipController::class, 'show']);
 Route::resource('friendships', FriendshipController::class)->only(['index', 'show']);
-// Route::get('/friendships/{user1_id}', [FriendshipController::class, 'show']);
+//Route::get('/friendships/{user1_id}', [FriendshipController::class, 'show']);
 //Route::get('/friendships', [FriendshipController::class, 'index']);
 //Route::get('/friendships/{user1_id}', [FriendshipController::class, 'show']);
 //Route::delete('/friendships/{user1_id}/{user2_id}', [FriendshipController::class, 'destroy']);

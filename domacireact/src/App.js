@@ -10,7 +10,7 @@ import axios from 'axios';
 import ProfilPage
  from './components/ProfilPage';
  import PostsPage from './components/PostsPage';
-
+import EditProfilPage from './components/EditProfilPage';
 
 function App() {
   const[token,setToken]=useState();
@@ -65,7 +65,7 @@ function App() {
    <Routes>
         <Route path="/login" element={<LoginPage addToken={addToken} />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path='/editprofile' element={<></>}/>
+        <Route path='/editprofile' element={<><EditProfilPage setUlogovani={setUlogovani} ulogovani={ulogovani}/></>}/>
         <Route path='/' element={<NavBar logout={logout}/>}>
           
         <Route path='profile/:user_id' element={<><ProfilPage renderAll={renderAll} setRenderAll={setRenderAll}></ProfilPage><PostsPage  renderAll={renderAll} setRenderAll={setRenderAll} /></>}/>

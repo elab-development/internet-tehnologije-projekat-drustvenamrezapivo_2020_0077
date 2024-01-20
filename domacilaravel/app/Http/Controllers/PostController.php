@@ -69,7 +69,7 @@ class PostController extends Controller
             }
         }
         //return $posts;
-        return response()->json(['success' => true, 'posts' => $pomocna, 'message'=>'Posts successfully retrieved'],200); //OVDE
+        return response()->json(['success' => true, 'posts' => $pomocna, 'message' => 'Posts successfully retrieved'], 200); //OVDE
         //   return PostResource::collection($posts);
         //   $posts = Post::all();
     }
@@ -104,7 +104,7 @@ class PostController extends Controller
                 $pomocna[] = $post;
             }
         }
-        return response()->json(['success' => true, 'posts' => $pomocna, 'message'=>'Posts successfully retrieved'],200); //OVDE
+        return response()->json(['success' => true, 'posts' => $pomocna, 'message' => 'Posts successfully retrieved'], 200); //OVDE
         //   return PostResource::collection($posts);
         //   $posts = Post::all();
     }
@@ -131,7 +131,7 @@ class PostController extends Controller
             }
             $post->user = User::where('user_id', $post->user_id)->first();
         }
-        return response()->json(['success' => true, 'posts' => $posts, 'message'=>'Posts successfully retrieved'],200); //OVDE
+        return response()->json(['success' => true, 'posts' => $posts, 'message' => 'Posts successfully retrieved'], 200); //OVDE
         //   return PostResource::collection($posts);
         //   $posts = Post::all();
     }
@@ -164,6 +164,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+
         // $imagePath = $request->file('image')->store('public/images');
         // $imageUrl = asset('api/' . str_replace('public/', '', $imagePath));
         // return $imageUrl;
@@ -181,11 +182,11 @@ class PostController extends Controller
         //return $request->image;
 
         if ($validator->fails())
-        return response()->json(['message' => 'Validation failed', 'errors'=>$validator->errors()],422); //OVDE
+            return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 422); //OVDE
 
         $user = User::where('user_id', $request->user_id)->first();
         if (!$user) {
-            return response()->json(['message' => "los unos"],404); //OVDE
+            return response()->json(['message' => "los unos"], 404); //OVDE
         }
         $controller = new PostController();
         $post_id = $controller->pomocna($request->user_id);
@@ -202,7 +203,7 @@ class PostController extends Controller
             'location' => $request->location
         ]);
 
-        return response()->json(['message'=> 'Post successfully created', 'Post' => $post],201); //OVDE
+        return response()->json(['message' => 'Post successfully created', 'Post' => $post], 201); //OVDE
     }
 
 
@@ -225,12 +226,12 @@ class PostController extends Controller
         $post = Post::where('user_id', $user_id)->where('post_id', $post_id)->first();
 
         if (is_null($post)) {
-            return response()->json(['message'=>'Data not found'], 404); //OVDE
+            return response()->json(['message' => 'Data not found'], 404); //OVDE
         }
 
         //return new ParentPostResource($post);
         // return new PostResource($post);
-        return response()->json(['message'=> 'Post successfully retrieved', 'Post' => $post],200); //OVDE
+        return response()->json(['message' => 'Post successfully retrieved', 'Post' => $post], 200); //OVDE
     }
 
     /**
@@ -264,7 +265,7 @@ class PostController extends Controller
 
 
         if ($validator->fails())
-        return response()->json(['message' => 'Validation failed', 'errors'=>$validator->errors()],422); //OVDE
+            return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 422); //OVDE
 
         $post = Post::where('user_id', $user_id)->where('post_id', $post_id)->first();
         if (!$post) {
@@ -287,7 +288,7 @@ class PostController extends Controller
         ]);
 
         $post = Post::where('user_id', $request->user_id)->where('post_id', $request->post_id)->get();
-        return response()->json(['data' => $post, 'message' => 'post sucesfully updated'],201); //OVDE
+        return response()->json(['data' => $post, 'message' => 'post sucesfully updated'], 201); //OVDE
     }
 
     /**
@@ -302,7 +303,7 @@ class PostController extends Controller
 
 
         if (is_null($post)) {
-            return response()->json(['message'=>'Data not found'], 404); // OVDE
+            return response()->json(['message' => 'Data not found'], 404); // OVDE
         }
 
         $currentImagePath = $post->image_path;
@@ -322,8 +323,6 @@ class PostController extends Controller
 
 
 
-        return response()->json(['message' => 'Post successfully deleted'],200); //OVDE
+        return response()->json(['message' => 'Post successfully deleted'], 200); //OVDE
     }
-
-    
 }

@@ -66,7 +66,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails())
-        return response()->json(['message' => 'Validation failed', 'errors'=>$validator->errors()],422); //OVDE
+            return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 422); //OVDE
 
 
         $user = User::create([
@@ -85,7 +85,7 @@ class UserController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        return response()->json(['message' => 'User successfully created', 'data' => $user, 'access_token' => $token, 'token_type' => 'Bearer'],201); //OVDE
+        return response()->json(['message' => 'User successfully created', 'data' => $user, 'access_token' => $token, 'token_type' => 'Bearer'], 201); //OVDE
     }
 
     /**
@@ -103,7 +103,7 @@ class UserController extends Controller
 
 
         if (is_null($user)) {
-            return response()->json(['message'=>'Data not found'], 404); //OVDE
+            return response()->json(['message' => 'Data not found'], 404); //OVDE
         }
 
         // return response()->json($user);
@@ -133,7 +133,7 @@ class UserController extends Controller
         }
 
         //return response()->json(['data' => $user, 'access_token' => $token, 'token_type' => 'Bearer']); staro
-        return response()->json(['success' => true, 'user' => $user, 'message'=>'User successfully retrieved'],200); //novo
+        return response()->json(['success' => true, 'user' => $user, 'message' => 'User successfully retrieved'], 200); //novo
     }
 
     /**
@@ -293,7 +293,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['message' => 'Validation failed', 'errors'=>$validator->errors()],422); //OVDE
+            return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 422); //OVDE
         }
         if (isset($request->picture)) {
             // return $request->picture;
@@ -302,7 +302,7 @@ class UserController extends Controller
 
             ]);
             if ($validator->fails()) {
-                return response()->json(['message' => 'Validation failed', 'errors'=>$validator->errors()],422); //OVDE
+                return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 422); //OVDE
             }
         }
 
@@ -381,11 +381,12 @@ class UserController extends Controller
 
 
         // Vraćanje ažuriranih podataka o korisniku
-        return response()->json(['data' => $user, 'message' => 'Korisnik uspešno ažuriran'],201); //OVDE
+        return response()->json(['data' => $user, 'message' => 'Korisnik uspešno ažuriran'], 201); //OVDE
     }
     public function updateWithPicture(Request $request)
     {
         //post
+        // return $request;
 
 
 
@@ -402,7 +403,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['message' => 'Validation failed', 'errors'=>$validator->errors()],422); //OVDE
+            return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 422); //OVDE
         }
 
         // Pronalaženje korisnika
@@ -504,12 +505,13 @@ class UserController extends Controller
         // $user = User::find($user_id);
         // return $user;
 
-        return response()->json(['data' => $user, 'message' => 'Korisnik uspešno ažuriran'],201); //OVDE
+        return response()->json(['data' => $user, 'message' => 'Korisnik uspešno ažuriran'], 201); //OVDE
 
         // Ažuriranje podataka
     }
     public function updateWithoutPicture(Request $request, $user_id)
     {
+
         //return $user_id;
         //put 
 
@@ -523,7 +525,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['message' => 'Validation failed', 'errors'=>$validator->errors()],422); //OVDE
+            return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 422); //OVDE
         }
 
 
@@ -610,7 +612,7 @@ class UserController extends Controller
 
 
         // Vraćanje ažuriranih podataka o korisniku
-        return response()->json(['data' => $user, 'message' => 'Korisnik uspešno ažuriran'],201); //OVDE
+        return response()->json(['data' => $user, 'message' => 'Korisnik uspešno ažuriran'], 201); //OVDE
     }
 
 
@@ -657,11 +659,11 @@ class UserController extends Controller
         //
         $user = User::find($user_id);
         if (is_null($user)) {
-            return response()->json(['message'=>'Data not found'], 404); //OVDE
+            return response()->json(['message' => 'Data not found'], 404); //OVDE
         }
         $user->delete();
 
-        return response()->json(['message' => 'User suscesfully deleted'],200); //OVDE
+        return response()->json(['message' => 'User suscesfully deleted'], 200); //OVDE
     }
 
 

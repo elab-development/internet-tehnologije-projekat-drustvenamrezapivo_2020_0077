@@ -21,6 +21,9 @@ function PostsPage({renderAll,setRenderAll}) {
 
   const[currentPosts,setCurrentPosts]=useState([]);
   const [allPosts, setAllPosts] = useState([]); 
+  const [filteredPosts, setFilteredPosts] = useState([]); 
+
+  const [filter, setFilter] = useState('');
    
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
@@ -32,9 +35,12 @@ function PostsPage({renderAll,setRenderAll}) {
     setCurrentPage(pageNumber);
     const indexOfLastPost = pageNumber * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    setCurrentPosts(allPosts.slice(indexOfFirstPost, indexOfLastPost));
+    setCurrentPosts(filteredPosts.slice(indexOfFirstPost, indexOfLastPost));
   };
   
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
  
   
   useEffect(() => {
@@ -61,7 +67,7 @@ function PostsPage({renderAll,setRenderAll}) {
       })
       .then((response) => {
         setAllPosts(response.data.posts);
-         
+        setFilteredPosts(response.data.posts); 
         setCurrentPosts(response.data.posts.slice(indexOfFirstPost, indexOfLastPost));
       })
       .catch((error) => {
@@ -69,7 +75,14 @@ function PostsPage({renderAll,setRenderAll}) {
       });
   }, [azurirajPosts,params]);
 
-  
+  useEffect(() => {
+    
+    
+    const filtered = allPosts.filter((post) => post.location.includes(filter) || post.content.includes(filter));
+    setFilteredPosts(filtered);
+    setCurrentPage(1);
+    setCurrentPosts(filtered.slice(0, postsPerPage)); 
+  }, [filter, allPosts]);
 
 
  
@@ -99,7 +112,23 @@ function PostsPage({renderAll,setRenderAll}) {
   return (
 
     <div className="container" style={{ textAlign: 'center' }}>
-       
+     <Form>
+      <Form.Group controlId="filter">
+        <Form.Label>Filter:</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Unesite filter"
+          value={filter}
+          onChange={handleFilterChange}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault(); 
+              handleFilterChange(e);
+            }
+          }}
+        />
+      </Form.Group>
+    </Form>
 
     <p>Trenutna širina prozora: {currentWindowWidth}px</p>
    
@@ -126,9 +155,9 @@ function PostsPage({renderAll,setRenderAll}) {
       )}
     </div>
     <div>
-      {allPosts.length > postsPerPage && (
+      {filteredPosts.length > postsPerPage && (
         <ul className="pagination">
-          {Array.from({ length: Math.ceil(allPosts.length / postsPerPage) }).map((_, index) => (
+          {Array.from({ length: Math.ceil(filteredPosts.length / postsPerPage) }).map((_, index) => (
             <li key={index} >
               <Button className={index + 1 == currentPage ? 'active' : ''}  onClick={() => paginate(index + 1)}>{index + 1}</Button>
             </li>

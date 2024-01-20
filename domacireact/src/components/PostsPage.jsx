@@ -6,7 +6,8 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import useWindowWidth from './useWindowWidth';
-
+import { Form } from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 
 
 function PostsPage({renderAll,setRenderAll}) {
@@ -19,10 +20,22 @@ function PostsPage({renderAll,setRenderAll}) {
 
 
   const[currentPosts,setCurrentPosts]=useState([]);
+  const [allPosts, setAllPosts] = useState([]); 
+   
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(5);
  
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
   
-
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    const indexOfLastPost = pageNumber * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    setCurrentPosts(allPosts.slice(indexOfFirstPost, indexOfLastPost));
+  };
   
+ 
   
   useEffect(() => {
     console.log("use effect postsPage");
@@ -47,14 +60,17 @@ function PostsPage({renderAll,setRenderAll}) {
         },
       })
       .then((response) => {
-        
-        setCurrentPosts(response.data.posts);
+        setAllPosts(response.data.posts);
+         
+        setCurrentPosts(response.data.posts.slice(indexOfFirstPost, indexOfLastPost));
       })
       .catch((error) => {
         console.log(error);
       });
   }, [azurirajPosts,params]);
+
   
+
 
  
 
@@ -83,6 +99,8 @@ function PostsPage({renderAll,setRenderAll}) {
   return (
 
     <div className="container" style={{ textAlign: 'center' }}>
+       
+
     <p>Trenutna širina prozora: {currentWindowWidth}px</p>
    
     <h1>{location.pathname.startsWith('/explore') ? 'Posts of unfriends' : ''}</h1>
@@ -105,6 +123,17 @@ function PostsPage({renderAll,setRenderAll}) {
         ))
       ) : (
         <></>
+      )}
+    </div>
+    <div>
+      {allPosts.length > postsPerPage && (
+        <ul className="pagination">
+          {Array.from({ length: Math.ceil(allPosts.length / postsPerPage) }).map((_, index) => (
+            <li key={index} >
+              <Button className={index + 1 == currentPage ? 'active' : ''}  onClick={() => paginate(index + 1)}>{index + 1}</Button>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
     

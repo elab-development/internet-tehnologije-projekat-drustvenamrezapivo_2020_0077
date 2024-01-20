@@ -3,6 +3,7 @@ import { Modal, Button,Row,Col } from 'react-bootstrap';
 import axios from 'axios';
 import ButtonSeeProfile from './ButtonSeeProfile';
 import ButtonDeletePost from './ButtonDeletePost';
+import ButtonFollow from './ButtonFollow';
 
 import { useLocation } from 'react-router-dom';
 
@@ -150,6 +151,8 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
         
       {location.pathname.startsWith('/explore/') || location.pathname.startsWith('/posts/')? <><ButtonSeeProfile user_id={post.user_id} name={post.user.name}/></>: <></>}
    
+      {location.pathname.startsWith('/explore/')? <><ButtonFollow azurirajPosts={azurirajPosts} setAzurirajPosts={setAzurirajPosts}  pozicija={"posts"} user_id={post.user_id}/></>: ""}
+       
         </div>
         
         <img src={post.image_path} style={{ width: '400px', height: '400px' }} />
@@ -181,7 +184,8 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
  
    <ButtonDeletePost  renderAll={renderAll} setRenderAll={setRenderAll}   post_id={post.post_id} user_id={post.user_id} />
     : <></>}
-          
+<div className="
+"></div>          
         </div>
      
 

@@ -6,6 +6,7 @@ import { Modal, Form } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';  //!!!!!
 import { useParams } from 'react-router-dom';
 import ButtonSeeProfile from './ButtonSeeProfile';
+import ButtonFollow from './ButtonFollow';
 
  
 function ProfilPage({renderAll,setRenderAll}) {
@@ -214,7 +215,8 @@ function ProfilPage({renderAll,setRenderAll}) {
      
     </div>
  
-            
+    
+      {user && window.sessionStorage.user_id!=user.user_id && friends && !friends.some(friend => friend.user_id ==params.user_id)? <><ButtonFollow  azurirajProfile={azurirajProfile} setAzurirajProfile={setAzurirajProfile} pozicija={"profile"}user_id={user.user_id}/></> : <></>}
  
  
             <div className="d-flex justify-content-end text-center py-1">

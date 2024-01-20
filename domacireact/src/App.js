@@ -2,8 +2,11 @@ import logo from './logo.svg';
 import './App.css';
 import { Routes,Route} from 'react-router-dom';
 import LoginPage from './components/LoginPage';
+import RegisterPage from './components/RegisterPage';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+
 
 function App() {
   const[token,setToken]=useState();
@@ -37,6 +40,7 @@ function App() {
   return (
    <Routes>
         <Route path="/login" element={<LoginPage addToken={addToken} />} />
+        <Route path="/register" element={<RegisterPage />} />
         
       </Routes>
   );

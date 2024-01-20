@@ -1,25 +1,47 @@
 import logo from './logo.svg';
 import './App.css';
+import { Routes,Route} from 'react-router-dom';
+import LoginPage from './components/LoginPage';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
+  const[token,setToken]=useState();
+  const[ulogovani,setUlogovani]=useState();
+
+  let navigate=useNavigate();
+
+  function addToken(auth_token,user) {
+    window.sessionStorage.setItem(
+      "auth_token",
+      auth_token
+    );
+    window.sessionStorage.setItem(
+      "user_id",
+      user.user_id
+    );
+    window.sessionStorage.setItem(
+      "user",
+       JSON.stringify(user)
+      
+    );
+    setToken(auth_token);
+    
+    setUlogovani(user);
+    
+    navigate("/");
+    
+   
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+   <Routes>
+        <Route path="/login" element={<LoginPage addToken={addToken} />} />
+        
+      </Routes>
   );
 }
+
+
 
 export default App;

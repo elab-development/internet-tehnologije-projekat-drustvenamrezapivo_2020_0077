@@ -16,6 +16,7 @@ import ProfilPage
  import PostsPage from './components/PostsPage';
 import EditProfilPage from './components/EditProfilPage';
 import Info from './components/Info';
+import AdminPage from './components/AdminPage';
 
 function App() {
   console.log("Izrenderovana app komponenta");
@@ -93,6 +94,8 @@ function App() {
         <Route path='profile/:user_id' element={<><ProfilPage renderAll={renderAll} setRenderAll={setRenderAll}></ProfilPage><PostsPage key={3}  renderAll={renderAll} setRenderAll={setRenderAll} /></>}/>
         <Route path='posts/:user_id' element={<PostsPage key={1}  />}/>
         <Route path='explore/:user_id' element={<PostsPage key={2}  />}/>
+
+        {JSON.parse(window.sessionStorage.user).role=="admin"?  <Route path='adminview1' element={<AdminPage  />}/> : <></>}
         <Route path="*" element={<Navigate to="/" />} />
         
       </Route>

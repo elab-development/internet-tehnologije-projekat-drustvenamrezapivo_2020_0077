@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from "react";
 import axios from "axios";
 import {Link} from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 function LoginPage({addToken}) {
 
@@ -47,6 +48,19 @@ function LoginPage({addToken}) {
             
           });
       }
+      function seeAplication(e){
+        navigate('/trial');
+      }
+      const buttonStyles = {
+        backgroundColor: '#98FB98',
+        color: '#000000',
+        fontSize: '20px',
+        padding: '10px 20px',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        margin:'10px',
+    };
 
 
   return (
@@ -56,6 +70,7 @@ function LoginPage({addToken}) {
       <div className="col-xl-10">
         <div className="card rounded-3 text-black">
           <div className="row g-0">
+          <Button style={buttonStyles} onClick={seeAplication}>See what we are offering with trial form</Button>
 
             <div >
               <div className="card-body p-md-5 mx-md-4">

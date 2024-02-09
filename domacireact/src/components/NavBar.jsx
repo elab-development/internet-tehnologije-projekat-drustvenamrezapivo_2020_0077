@@ -37,7 +37,20 @@ function NavBar({logout}) {
                 Explore
         </Link>
         </li>
+
+
+        {JSON.parse(window.sessionStorage.user).role=='admin'?<>
         <li className="nav-item">
+          
+          <Link to={`/adminview1`} className="nav-link">
+                  Reported content
+          </Link>
+          </li>
+        </> : <></>}
+
+
+        <li className="nav-item">
+
       
         <Button onClick={(e)=>{logout(e)}} variant="primary">Logout</Button>
         </li>

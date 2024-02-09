@@ -18,6 +18,8 @@ import EditProfilPage from './components/EditProfilPage';
 import Info from './components/Info';
 import AdminPage from './components/AdminPage';
 
+import RolePage from './components/RolePage';
+
 function App() {
   console.log("Izrenderovana app komponenta");
 
@@ -96,6 +98,7 @@ function App() {
         <Route path='explore/:user_id' element={<PostsPage key={2}  />}/>
 
         {JSON.parse(window.sessionStorage.user).role=="admin"?  <Route path='adminview1' element={<AdminPage  />}/> : <></>}
+        {JSON.parse(window.sessionStorage.user).role=="admin"?  <Route path='adminview2' element={<RolePage  />}/> : <></>}
         <Route path="*" element={<Navigate to="/" />} />
         
       </Route>

@@ -49,6 +49,16 @@ function NavBar({logout}) {
         </> : <></>}
 
 
+        {JSON.parse(window.sessionStorage.user).role=='admin'?<>
+        <li className="nav-item">
+          
+          <Link to={`/adminview2`} className="nav-link">
+                  Roles
+          </Link>
+          </li>
+        </> : <></>}
+
+
         <li className="nav-item">
 
       

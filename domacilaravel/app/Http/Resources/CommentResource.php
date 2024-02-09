@@ -21,6 +21,7 @@ class CommentResource extends JsonResource
             'content' => $this->resource->content,
             'created_at' => $this->resource->created_at,
 
+
         ];
     }
 }

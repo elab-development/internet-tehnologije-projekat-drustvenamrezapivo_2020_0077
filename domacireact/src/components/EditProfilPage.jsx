@@ -6,6 +6,7 @@ import ButtonSeeProfile from './ButtonSeeProfile';
 
 function EditProfilPage({ulogovani,setUlogovani}) {
     let navigate=useNavigate();
+
     const [mojUser,setMojUser]=useState({
         "user_id":ulogovani.user_id+"",
                 "username":ulogovani.name,
@@ -15,13 +16,18 @@ function EditProfilPage({ulogovani,setUlogovani}) {
                "password1":"",
                 "picture":""
     });
+
     const[isteSifre,setIsteSifre]=useState(true);
     const[postojiEmail,setPostojiEmail]=useState(false);
     const[dobraDuzina,setDobraDuzina]=useState(true);
     const[prazniEmailIliIme,setPrazniEmailIliIme]=useState(false);
+
+
+    const [editPassword, setEditPassword] = useState(false);
     
     function najpomocnija(e){
         setEditPassword(!editPassword);
+
         setDobraDuzina(true);
         setIsteSifre(true);
     }
@@ -34,6 +40,7 @@ function EditProfilPage({ulogovani,setUlogovani}) {
             
             return;
         }
+
         setPrazniEmailIliIme(false);
         setPostojiEmail(false);
         setIsteSifre(true);
@@ -60,13 +67,13 @@ function EditProfilPage({ulogovani,setUlogovani}) {
     }
     function pomocna(broj){
         
-        if(broj==1){
-
-        }
+        
         if(broj==2){
             
             let newUserData = mojUser;
             newUserData['password'] = ulogovani.password;
+            console.log("ovde");
+            console.log(ulogovani.password);
            
             setMojUser(newUserData);
         }
@@ -157,11 +164,11 @@ function EditProfilPage({ulogovani,setUlogovani}) {
         setMojUser(newUserData);
   
     }
-    const [editPassword, setEditPassword] = useState(false);
+    
   return (
     
         <div className="container rounded bg-white mt-5 mb-5">
-            <ButtonSeeProfile user_id={window.sessionStorage.user_id} name={"Return to your profile"}/>
+            <ButtonSeeProfile user_id={window.sessionStorage.user_id} name={"return to you profil"}/>
     <div className="row">
         
         <div className="col-md-3 border-right">
@@ -182,8 +189,10 @@ function EditProfilPage({ulogovani,setUlogovani}) {
                 </div>
                 <div className="row mt-3">
                     <div className="col-md-12"><button onClick={(e)=>{najpomocnija(e)}} className="labels btn btn-danger">{!editPassword ? "I want to edit my password too" : "Better dont change password"}</button></div>
-                    {editPassword? <>  <div className="col-md-12"><label className="labels">Password</label><input  name="password"  onChange={(e)=>{handleInput(e)}}  type="password" className="form-control" placeholder="password" defaultValue=""/></div>
-                    <div className="col-md-12"><label className="labels">Repeat password</label><input name="password1" type="password" onChange={(e)=>{handleInput(e)}}  className="form-control" placeholder="repeated password" defaultValue=""/></div></> : <></>}
+                    {editPassword? <>  
+                    <div className="col-md-12"><label className="labels">Password</label><input  name="password"  onChange={(e)=>{handleInput(e)}}  type="password" className="form-control" placeholder="password" defaultValue=""/></div>
+                    <div className="col-md-12"><label className="labels">Repeat password</label><input name="password1" type="password" onChange={(e)=>{handleInput(e)}}  className="form-control" placeholder="repeated password" defaultValue=""/></div></> 
+                    : <></>}
                 
                 </div>
                 

@@ -1,25 +1,35 @@
 import logo from './logo.svg';
 import './App.css';
+
 import { Routes,Route,Navigate} from 'react-router-dom';
+
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import NavBar from './components/NavBar';
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProfilPage
  from './components/ProfilPage';
+
  import PostsPage from './components/PostsPage';
 import EditProfilPage from './components/EditProfilPage';
 
 function App() {
-  const[token,setToken]=useState();
+  console.log("Izrenderovana app komponenta");
+
+  
+
   const[ulogovani,setUlogovani]=useState();
+
+
   const[renderAll,setRenderAll]=useState(false);
 
   let navigate=useNavigate();
 
   function addToken(auth_token,user) {
+    
     window.sessionStorage.setItem(
       "auth_token",
       auth_token
@@ -30,10 +40,10 @@ function App() {
     );
     window.sessionStorage.setItem(
       "user",
-       JSON.stringify(user)
+       JSON.stringify(user),
       
     );
-    setToken(auth_token);
+    
     
     setUlogovani(user);
     
@@ -43,6 +53,7 @@ function App() {
   }
 
   function logout(){
+    
     axios.post('/api/logout',null,{
       headers:{
         'Authorization': `Bearer ${window.sessionStorage.auth_token}`,
@@ -51,7 +62,7 @@ function App() {
       window.sessionStorage.removeItem('auth_token');
     window.sessionStorage.removeItem('user');
     window.sessionStorage.removeItem('user_id');
-    setToken();
+    
   
     setUlogovani()
 
@@ -81,6 +92,7 @@ function App() {
         <Route path='posts/:user_id' element={<PostsPage  />}/>
         <Route path='explore/:user_id' element={<PostsPage  />}/>
         <Route path="*" element={<Navigate to="/" />} />
+        
       </Route>
    
    

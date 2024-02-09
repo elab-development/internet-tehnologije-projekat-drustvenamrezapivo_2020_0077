@@ -4,11 +4,15 @@ import axios from "axios";
 import {Link} from 'react-router-dom';
 
 function LoginPage({addToken}) {
+
     const [userData, setUserData] = useState({
         email: "",
         password: "",
       });
+
+
     const[uspesno,setUspesno]=useState(true);
+
 
       function handleInput(e) {
        
@@ -29,7 +33,7 @@ function LoginPage({addToken}) {
        axios
           .post("api/login", userData)
           .then((response) => {   
-            
+            console.log(response.data);
             if (response.data.success === true) {
            
           addToken(response.data.access_token,response.data.user);  
@@ -87,9 +91,10 @@ function LoginPage({addToken}) {
 
                   <div className="d-flex align-items-center justify-content-center pb-4">
                     <p className="mb-0 me-2">Don't have an account?</p>
-                    <button type="button" className="btn btn-outline-danger"><Link to="/register" className="nav-link">
+                    <button type="button" className="btn btn-outline-danger">
+                      <Link to="/register" className="nav-link">
                 Create new
-        </Link></button>
+                </Link></button>
                   </div>
 
                 </form>

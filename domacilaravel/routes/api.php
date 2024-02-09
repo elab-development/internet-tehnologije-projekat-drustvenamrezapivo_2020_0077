@@ -42,6 +42,7 @@ Route::resource('comments', CommentController::class)->only(['index']); //samo i
 //Route::resource('/likes', LikeController::class);
 //Route::resource('likes', LikeController::class);
 Route::resource('likes', LikeController::class)->only(['index']);
+
 Route::get('/likes/{user_id}/{post_id}/{liker_id}', [LikeController::class, 'show']);
 //Route::get('/likes', [LikeController::class, 'index']);
 //Route::get('/likes/{user_id}/{post_id}/{liker_id}', [LikeController::class, 'show']);
@@ -82,21 +83,17 @@ Route::get('/posts/{user_id}/{post_id}', [PostController::class, 'show']);
 // Route::get('/users', [UserController::class, 'index']);
 
 Route::resource('users', UserController::class)->only(['index', 'show']);
+//Route::get('/users', [UserController::class, 'index']); 
 // Route::get('/users/{user_id}', [UserController::class, 'show']); 
 
 // Route::post('/users', [UserController::class, 'store']);
 
 
-// Route::put('/users/{user_id}', [UserController::class, 'updateNova']);
-// Route::post('/img/users/{user_id}', [UserController::class, 'update']);
-// Route::post('/img/users/{user_id}', [UserController::class, 'update']);
 
-
-// Route::post('/picture', [UserController::class, 'savePicture']);
 //Route::delete('/users/{user_id}', [UserController::class, 'destroy']);
 
 
-//Route::post('/users/img', [UserController::class, 'setPicture']);
+
 
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -109,6 +106,16 @@ Route::get('images/{imageName}', [UserController::class, 'getImage']);
 Route::get('/postsOfFriends/{user_id}', [PostController::class, 'postsOfFriends']);
 Route::get('/postsOfEnemies/{user_id}', [PostController::class, 'postsOfEnemies']);
 Route::get('/postsOfProfile/{user_id}', [PostController::class, 'postsOfProfile']);
+
+Route::put('/users/resetPassword', [UserController::class, 'resetPassword']);
+
+
+Route::get('/info', [UserController::class, 'info']);
+
+
+Route::get('/mostActive', [UserController::class, 'mostActive']);
+
+Route::put('/setAdmin/{user_id}', [UserController::class, 'setAdmin']);
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {

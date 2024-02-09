@@ -190,8 +190,12 @@ class PostController extends Controller
         }
         $controller = new PostController();
         $post_id = $controller->pomocna($request->user_id);
+
+
         $imagePath = $request->file('image')->store('public/images');
+
         $imageUrl = asset('api/' . str_replace('public/', '', $imagePath));
+
         $post = Post::create([
 
             'user_id' => $request->user_id,
@@ -314,11 +318,16 @@ class PostController extends Controller
         // Stvaranje apsolutne putanje na disku
         $absolutePath = storage_path('app/' . $relativePath);
 
+        if (file_exists($absolutePath) && $currentImagePath != "http://127.0.0.1:8000/api/images/KWpoirYG6b0No3Sha5qdLsXl4HYiiNz2z4uKtPCW.png") {
+            // Slika postoji, sada je brišemo
+            unlink($absolutePath);
+        } else {
+        }
+
         // $post->delete();
         Post::where('user_id', $user_id)
             ->where('post_id', $post_id)
             ->delete();
-
 
 
 

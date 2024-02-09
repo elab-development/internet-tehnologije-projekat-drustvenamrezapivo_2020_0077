@@ -8,20 +8,28 @@ function RegisterPage() {
     function handleInput(e) {
         let newUserData = userData;
         newUserData[e.target.name] = e.target.value;
+        
 
         setUserData(newUserData);
       }
+
     const [userData, setUserData] = useState({
         email: "",
         password: "",
         repeatedPassword:"",
         username:"",
       });
+
+      
     const[uspesno,setUspesno]=useState(true);
     const[postojiEmail,setPostojiEmail]=useState(false);
     const[razliciteSifre,setRazliciteSifre]=useState(false);
+
+
     let navigate = useNavigate();
+
     function handleRegister(e) {
+        console.log(e);
         e.preventDefault();
         if(userData.password!==userData.repeatedPassword){
           
@@ -35,10 +43,7 @@ function RegisterPage() {
             
     
             if (response.data.success === true) {
-              window.sessionStorage.setItem(
-                "auth_token",
-                response.data.access_token
-              );
+              
               
               navigate("/login");  
             }else{
@@ -74,7 +79,7 @@ function RegisterPage() {
 
                 <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
-                <form  onSubmit={(e)=>handleRegister(e)}  className="mx-1 mx-md-4">
+                <form  onSubmit={(e)=>{handleRegister(e)}}  className="mx-1 mx-md-4">
 
                   <div className="d-flex flex-row align-items-center mb-4">
                     <i className="fas fa-user fa-lg me-3 fa-fw"></i>

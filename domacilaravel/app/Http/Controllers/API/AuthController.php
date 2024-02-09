@@ -42,6 +42,8 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'picture' => "http://127.0.0.1:8000/api/images/KWpoirYG6b0No3Sha5qdLsXl4HYiiNz2z4uKtPCW.png"
+
+
         ]);
 
 
@@ -66,6 +68,8 @@ class AuthController extends Controller
         if (!Auth::attempt($request->only('email', 'password')))
             // return response()->json(['message'=>'Unautorized'],401);staro
             return response()->json(['success' => false, 'message' => 'dont exists user like this'], 401); //novo
+
+
 
         $user = User::where('email', $request->email)->firstOrFail();
 

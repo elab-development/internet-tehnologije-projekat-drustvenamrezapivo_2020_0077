@@ -420,8 +420,10 @@ class UserController extends Controller
 
         // // Pronalaženje pozicije 'images' i dobijanje dela putanje posle toga
         // $finalPath = substr($path, strpos($path, 'images'));
+
         $currentImagePath = $user->picture;
 
+        // return $request->file('picture');
 
         // Pretvaranje URL-a u relativnu putanju
         $relativePath = str_replace(url('/api/images'), 'public/images', $currentImagePath);
@@ -435,9 +437,12 @@ class UserController extends Controller
 
         //  return "poslao sliku";
         //return $request->file('picture');
+
         $imagePath = $request->file('picture')->store('public/images');
+        //api/images/SgxrY1VnbOrcdFxNFEf28m7Msmg186ymRA2vRBLk.jpg
         // $imageUrl = asset('storage/' . str_replace('public/', '', $imagePath)); bilo ovako
         $imageUrl = asset('api/' . str_replace('public/', '', $imagePath));
+
         if ($user->email == $request->email) {
             //return "nije menjao email";
             $user->update([
@@ -671,7 +676,7 @@ class UserController extends Controller
     {
         //  return $imageName;
         $imagePath = storage_path("app/public/images/{$imageName}");
-
+        // return $imagePath;
         if (file_exists($imagePath)) {
             // return response()->file($imagePath);
 
@@ -693,4 +698,108 @@ class UserController extends Controller
     //     $x = Friendship::where('user1_id', $user_id)->count();
     //     return $x;
     // }
+    public function resetPassword(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+
+            'email' => 'required|email|string|max:255',
+            'password' => 'required|string|min:8',
+
+        ]);
+
+        if ($validator->fails())
+            return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 422); //OVDE
+
+
+
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json(['message' => 'Korisnik nije pronađen'], 404);
+        }
+        DB::update("
+                 UPDATE users
+               SET password=?
+              WHERE email =?
+             ", [
+            Hash::make($request->password),
+            $request->email,
+        ]);
+
+        return response()->json(['data' => $user, 'message' => 'Sifra  uspešno ažurirana'], 201);
+    }
+    public function info()
+    {
+        $columnCountUsers = DB::select("SELECT COUNT(*) as count FROM users");
+        $columnCountPosts = DB::select("SELECT COUNT(*) as count FROM posts");
+        $columnCountAdmins = DB::select("SELECT COUNT(*) as count FROM users where role='admin'");
+
+
+        $numberOfPosts = $columnCountPosts[0]->count;
+        $numberOfUsers = $columnCountUsers[0]->count;
+        $numberOfAdmins = $columnCountAdmins[0]->count;
+
+
+
+        return response()->json(['numberOfPosts' => $numberOfPosts, 'numberOfUsers' => $numberOfUsers, 'numberOfAdmins' => $numberOfAdmins], 200);
+    }
+    public function mostActive()
+    {
+
+        $maxPosts = DB::table('posts')
+            ->selectRaw('COUNT(*) as max_posts')
+            ->whereYear('created_at', '=', now()->year)
+            ->whereMonth('created_at', '=', now()->month)
+            ->groupBy('user_id')
+            ->orderByDesc('max_posts')
+            ->limit(1)
+            ->value('max_posts');
+
+
+        $usersWithMaxPosts = User::select('users.*')
+            ->join('posts', 'users.user_id', '=', 'posts.user_id')
+            ->whereYear('posts.created_at', '=', now()->year)
+            ->whereMonth('posts.created_at', '=', now()->month)
+            ->groupBy('users.user_id', 'users.name', 'users.email', 'users.date_of_verification', 'users.password', 'users.remember_token', 'users.created_at', 'users.updated_at', 'users.picture', 'users.about', 'users.role')
+            ->havingRaw('COUNT(*) = ?', [$maxPosts])
+            ->get();
+
+        return response()->json(['users' => $usersWithMaxPosts], 200);
+    }
+    public function setAdmin(Request $request, $user_id)
+    {
+        $user = User::find($user_id);
+        if (!$user) {
+            return response()->json(['message' => 'Korisnik nije pronađen'], 404); //OKEJ
+        }
+        $user->update([
+            //'username' => $request->username,
+            // 'email' => $request->email,
+            // 'password' => Hash::make($request->password),
+            //'about' => $request->about,
+            // 'name' => $request->username,
+            'role' => "admin"
+
+        ]);
+
+        DB::update("
+         UPDATE users
+          SET role=?
+           WHERE user_id =?
+       ", [
+
+            "admin",
+            $user_id
+
+
+        ]);
+
+
+
+
+        $user = User::find($user_id);
+        return response()->json(['message' => 'Korisnik uspešno ažuriran', 'user' => $user], 201); //OVDE
+
+
+    }
 }

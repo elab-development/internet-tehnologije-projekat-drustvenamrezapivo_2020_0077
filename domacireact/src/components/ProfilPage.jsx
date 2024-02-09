@@ -12,10 +12,12 @@ import ButtonUnfollow from './ButtonUnfollow';
 function ProfilPage({renderAll,setRenderAll}) {
  
   console.log("Ponovo izrenderovana profil page");
+
     const [user,setUser]=useState();
     const[friends,setFriends]=useState();
  
     const[azurirajProfile,setAzurirajProfile]=useState(false);
+    
     let params=useParams();
  
     const [showModal, setShowModal] = useState(false);
@@ -30,6 +32,7 @@ function ProfilPage({renderAll,setRenderAll}) {
    
  
     // const handleContentChange = (e) => setContent(e.target.value);
+
     function handleContentChange(e){
       // console.log(e.target.value);
       setContent(e.target.value);
@@ -178,7 +181,7 @@ function ProfilPage({renderAll,setRenderAll}) {
  
                 <div>
       { user && window.sessionStorage.user_id==user.user_id? <> <Button variant="primary" onClick={handleShow}>
-        Dodaj post1
+        Dodaj post
       </Button>
  
       <Modal show={showModal} onHide={handleClose}>
@@ -190,6 +193,7 @@ function ProfilPage({renderAll,setRenderAll}) {
             <Form.Group controlId="content">
               <Form.Label>Sadržaj</Form.Label>
               <Form.Control type="text" value={content} onChange={handleContentChange} />
+              
             </Form.Group>
  
             <Form.Group controlId="file">
@@ -208,7 +212,7 @@ function ProfilPage({renderAll,setRenderAll}) {
             Zatvori
           </Button>
           <Button variant="primary" onClick={handleAddPost}>
-            Dodaj post2
+            Dodaj post
           </Button>
         </Modal.Footer>
       </Modal></> : <></>}

@@ -10,20 +10,26 @@ import { Form } from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
 
 
+
 function PostsPage({renderAll,setRenderAll}) {
   console.log("postsPage render");
   const location = useLocation();
   const params=useParams();
+
   const currentWindowWidth = useWindowWidth();
 
   const [azurirajPosts, setAzurirajPosts] = useState(false);
+
 
 
   const[currentPosts,setCurrentPosts]=useState([]);
   const [allPosts, setAllPosts] = useState([]); 
   const [filteredPosts, setFilteredPosts] = useState([]); 
 
+
+  
   const [filter, setFilter] = useState('');
+  
    
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
@@ -41,7 +47,7 @@ function PostsPage({renderAll,setRenderAll}) {
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
- 
+  
   
   useEffect(() => {
     console.log("use effect postsPage");
@@ -80,9 +86,11 @@ function PostsPage({renderAll,setRenderAll}) {
     
     const filtered = allPosts.filter((post) => post.location.includes(filter) || post.content.includes(filter));
     setFilteredPosts(filtered);
+    
     setCurrentPage(1);
     setCurrentPosts(filtered.slice(0, postsPerPage)); 
   }, [filter, allPosts]);
+
 
 
  
@@ -132,10 +140,10 @@ function PostsPage({renderAll,setRenderAll}) {
 
     <p>Trenutna širina prozora: {currentWindowWidth}px</p>
    
-    <h1>{location.pathname.startsWith('/explore') ? 'Posts of unfriends' : ''}</h1>
-    <h1>{location.pathname.startsWith('/profile') ? 'Posts of profile' : ''}</h1>
+    <h1>{location.pathname.startsWith('/explore') ? 'Posts o unfriends' : ''}</h1>
+    <h1>{location.pathname.startsWith('/profile') ? 'Posts off profile' : ''}</h1>
     <h1>{location.pathname.startsWith('/posts') ? 'Posts of friends' : ''}</h1>
-    <div style={postContainerStyle}>
+    <div style={postContainerStyle} >
       {currentPosts ? (
         currentPosts.map((post) => (
           <div key={`${post.user_id}_${post.post_id}`} style={postStyle}>

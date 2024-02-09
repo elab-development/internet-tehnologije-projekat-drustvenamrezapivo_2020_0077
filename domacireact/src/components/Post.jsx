@@ -182,6 +182,7 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
           <Button variant="primary" onClick={handleShowDetails}>
             Detalji
           </Button>
+
           {trenutnaPutanja!=='/explore' && trenutnaPutanja!=='/posts' && window.sessionStorage.user_id==user_id ?
  
    <ButtonDeletePost  renderAll={renderAll} setRenderAll={setRenderAll}   post_id={post.post_id} user_id={post.user_id} />
@@ -210,6 +211,7 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
             <Col sm={3}>
               
             <ButtonSeeProfile handleCloseDetails={handleCloseDetails} user_id={comment.commentator.user_id} name={comment.commentator.name}></ButtonSeeProfile>
+            
             </Col>
             
             <Col sm={9}>

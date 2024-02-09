@@ -15,6 +15,7 @@ import ProfilPage
 
  import PostsPage from './components/PostsPage';
 import EditProfilPage from './components/EditProfilPage';
+import Info from './components/Info';
 
 function App() {
   console.log("Izrenderovana app komponenta");
@@ -77,6 +78,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage addToken={addToken} />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/trial" element={<><Info/><PostsPage/></>}/>
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     );
@@ -88,9 +90,9 @@ function App() {
       <Route path='/editprofile' element={<EditProfilPage setUlogovani={setUlogovani} ulogovani={ulogovani}/>}/>
       <Route path='/' element={<NavBar logout={logout}/>}>
  
-        <Route path='profile/:user_id' element={<><ProfilPage renderAll={renderAll} setRenderAll={setRenderAll}></ProfilPage><PostsPage  renderAll={renderAll} setRenderAll={setRenderAll} /></>}/>
-        <Route path='posts/:user_id' element={<PostsPage  />}/>
-        <Route path='explore/:user_id' element={<PostsPage  />}/>
+        <Route path='profile/:user_id' element={<><ProfilPage renderAll={renderAll} setRenderAll={setRenderAll}></ProfilPage><PostsPage key={3}  renderAll={renderAll} setRenderAll={setRenderAll} /></>}/>
+        <Route path='posts/:user_id' element={<PostsPage key={1}  />}/>
+        <Route path='explore/:user_id' element={<PostsPage key={2}  />}/>
         <Route path="*" element={<Navigate to="/" />} />
         
       </Route>

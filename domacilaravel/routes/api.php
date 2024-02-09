@@ -118,6 +118,15 @@ Route::get('/mostActive', [UserController::class, 'mostActive']);
 Route::put('/setAdmin/{user_id}', [UserController::class, 'setAdmin']);
 
 
+Route::post('/postreports', [PostController::class, 'addPostReport']);
+Route::post('/commentreports', [PostController::class, 'addCommentReport']);
+
+Route::delete('/postreports/{user_id}/{post_id}/{reporter_id}', [PostController::class, 'removePostReport']);
+Route::delete('/commentreports/{user_id}/{post_id}/{comment_id}/{reporter_id}', [PostController::class, 'removeCommentReport']);
+
+Route::get('/offensive', [PostController::class, 'offensive']);
+
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/profile', function (Request $request) {
         return auth()->user();

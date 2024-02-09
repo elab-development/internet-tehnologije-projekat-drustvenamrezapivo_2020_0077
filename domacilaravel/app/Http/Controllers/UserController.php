@@ -21,6 +21,11 @@ use Illuminate\Validation\Rule;
 use Mockery\Undefined;
 use PhpParser\Node\Expr\Cast\String_;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PasswordResetMail;
+use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use function Symfony\Component\String\b;
 
 class UserController extends Controller
@@ -698,7 +703,7 @@ class UserController extends Controller
     //     $x = Friendship::where('user1_id', $user_id)->count();
     //     return $x;
     // }
-    public function resetPassword(Request $request)
+  /*  public function resetPassword(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
@@ -727,7 +732,7 @@ class UserController extends Controller
         ]);
 
         return response()->json(['data' => $user, 'message' => 'Sifra  uspešno ažurirana'], 201);
-    }
+    }*/
     public function info()
     {
         $columnCountUsers = DB::select("SELECT COUNT(*) as count FROM users");
@@ -802,4 +807,76 @@ class UserController extends Controller
 
 
     }
+
+    public function sendResetLinkEmailApi(Request $request) {
+        $request->validate(['email' => 'required|email|exists:users,email']);
+
+        $token = Str::random(60);
+        Log::info('Generated Token: ' . $token);
+        $passwordReset = DB::table('password_resets')->updateOrInsert(
+            ['email' => $request->email],
+            [
+                'email' => $request->email,
+                'token' => Hash::make($token),
+                'created_at' => Carbon::now()
+            ]
+        );
+
+        if ($passwordReset) {
+            // Send Email
+            Mail::to($request->email)->send(new PasswordResetMail($token));
+
+            return response()->json([
+                'message' => 'We have e-mailed your password reset link!'
+            ]);
+        }
+
+        return response()->json(['message' => 'Error during password reset'], 500);
+    }
+
+    public function showResetForm(Request $request, $token = null)
+{
+   //   return view('emails.reset', ['token' => $token]);
+
+   return view('emails.reset', ['token' => $token]);
+
+}
+
+
+    public function resetPassword(Request $request)
+{
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|confirmed',
+    ]);
+
+    // Retrieve all tokens for the given email
+    $passwordResets = DB::table('password_resets')->where('email', $request->email)->get();
+
+    $tokenValid = false;
+    foreach ($passwordResets as $passwordReset) {
+        if (Hash::check($request->token, $passwordReset->token)) {
+            $tokenValid = true;
+            break;
+        }
+    }
+
+    if (!$tokenValid) {
+        return response()->json(['message' => 'Invalid token'], 400);
+    }
+
+    $user = User::where('email', $request->email)->first();
+    if (!$user) {
+        return response()->json(['message' => 'User does not exist'], 404);
+    }
+
+    $user->password = Hash::make($request->password);
+    $user->save();
+
+    // Delete password reset tokens for this user
+    DB::table('password_resets')->where(['email'=> $request->email])->delete();
+
+    return response()->json(['message' => 'Password successfully reset']);
+}
 }

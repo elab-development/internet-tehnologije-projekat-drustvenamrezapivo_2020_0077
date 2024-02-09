@@ -126,6 +126,8 @@ Route::delete('/commentreports/{user_id}/{post_id}/{comment_id}/{reporter_id}', 
 
 Route::get('/offensive', [PostController::class, 'offensive']);
 
+Route::post('reset-password', [UserController::class, 'sendResetLinkEmailApi']);
+
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/profile', function (Request $request) {

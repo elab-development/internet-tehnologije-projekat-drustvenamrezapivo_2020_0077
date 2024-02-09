@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from "react";
 import axios from "axios";
 import {Link} from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Modal, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage({addToken}) {
@@ -14,6 +14,45 @@ function LoginPage({addToken}) {
 
 
     const[uspesno,setUspesno]=useState(true);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    const openModal = () => {
+
+      
+      setModalIsOpen(true);
+      setUspesno(true);
+
+    }
+
+    const closeModal = () => {
+
+      setUspesno(true);
+      setModalIsOpen(false);
+      setUserData(currentData => ({ ...currentData, email: '' }));
+    }
+
+    const handleForgotPassword = () => {
+      axios
+      .post("api/reset-password", { email: userData.email }) // Replace with the actual endpoint for password reset
+      .then((response) => {
+        if (response.data.success) {
+          // Handle success, e.g., display a success message to the user
+          console.log('Password reset initiated successfully.');
+        } else {
+          // Handle failure, e.g., display an error message to the user
+          console.error('Failed to initiate password reset.');
+        }
+      })
+      .catch((error) => {
+        // Handle any errors during the request
+        console.error('An error occurred while initiating password reset.', error);
+      })
+      .finally(() => {
+        // Close the modal after handling
+        closeModal();
+      });
+    
+    };
 
 
       function handleInput(e) {
@@ -96,6 +135,30 @@ function LoginPage({addToken}) {
                     <input type="password" id="form2Example22" className="form-control"  name='password' onInput={(e)=>handleInput(e)}/>
                     <label className="form-label" htmlFor="form2Example22">Password</label>
                   </div>
+
+                  <button type="button" className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" onClick={openModal}>Forgot Password?</button>
+
+                                        {/* Modal for "Forgot Password" */}
+                                        <Modal show={modalIsOpen} onHide={closeModal}>
+                                          <Modal.Header closeButton>
+                                            <Modal.Title>Forgot Password</Modal.Title>
+                                          </Modal.Header>
+                                          <Modal.Body>
+                                            {/* Include form elements for the "Forgot Password" functionality */}
+                                            {/* For example, an email input */}
+                                            <Form.Group className="mb-4">
+                                              <Form.Control type="email" placeholder="Enter your email" name="email"   onInput={(e)=>handleInput(e)} />
+                                            </Form.Group>
+                                          </Modal.Body>
+                                          <Modal.Footer>
+                                            <Button variant="primary" onClick={handleForgotPassword}>
+                                              Reset Password
+                                            </Button>
+                                            <Button variant="secondary" onClick={closeModal}>
+                                              Close
+                                            </Button>
+                                          </Modal.Footer>
+                                        </Modal>
 
                   <div className="text-center pt-1 mb-5 pb-1">
                     <button type="submit" className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3">Log

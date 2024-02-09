@@ -143,6 +143,123 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
             console.log(error);
         })
   }
+
+  function addReportComment(user_id,post_id,comment_id,reporter_id){
+    console.log(user_id);
+    console.log(post_id);
+    console.log(comment_id);
+    console.log(reporter_id);
+
+   
+   
+
+        
+        const data=new FormData();
+        data.append('user_id',user_id);
+        data.append('post_id',post_id);
+        data.append('comment_id',comment_id);
+        data.append('reporter_id',reporter_id);
+        
+        axios.post('api/commentreports/',data, {
+          headers: {
+          
+           'Authorization': `Bearer ${window.sessionStorage.auth_token}`, 
+           
+          },
+        }).then((response)=>{
+        
+        
+        setAzurirajPosts(azurirajPosts => !azurirajPosts);
+        
+              
+        }).catch((error)=>{
+            console.log(error);
+        })
+
+   }
+   function removeReportComment(user_id,post_id,comment_id,reporter_id){
+    console.log(user_id);
+    console.log(post_id);
+    console.log(comment_id);
+    console.log(reporter_id);
+
+    axios.delete('api/commentreports/'+user_id+"/"+post_id+"/"+comment_id+"/"+reporter_id, {
+      headers: {
+       
+        
+       'Authorization': `Bearer ${window.sessionStorage.auth_token}`, 
+     
+      },
+    }).then((response)=>{
+   
+     
+    setAzurirajPosts(azurirajPosts => !azurirajPosts);
+    
+
+          
+    }).catch((error)=>{
+        console.log(error);
+    })
+
+
+    
+   }
+   function addReportPost(user_id,post_id,reporter_id){
+    console.log(user_id);
+    console.log(post_id);
+    
+    console.log(reporter_id);
+
+
+    const data=new FormData();
+    data.append('user_id',user_id);
+    data.append('post_id',post_id);
+    data.append('reporter_id',reporter_id);
+    
+    axios.post('api/postreports/',data, {
+      headers: {
+      
+       'Authorization': `Bearer ${window.sessionStorage.auth_token}`, 
+       
+      },
+    }).then((response)=>{
+    
+    
+    setAzurirajPosts(azurirajPosts => !azurirajPosts);
+    
+          
+    }).catch((error)=>{
+        console.log(error);
+    })
+
+
+   }
+   function removeReportPost(user_id,post_id,reporter_id){
+    console.log(user_id);
+    console.log(post_id);
+    
+    console.log(reporter_id);
+
+    axios.delete('api/postreports/'+user_id+"/"+post_id+"/"+reporter_id, {
+      headers: {
+       
+        
+       'Authorization': `Bearer ${window.sessionStorage.auth_token}`, 
+     
+      },
+    }).then((response)=>{
+   
+     
+    setAzurirajPosts(azurirajPosts => !azurirajPosts);
+    
+
+          
+    }).catch((error)=>{
+        console.log(error);
+    })
+
+   }
+
   
 
   return (
@@ -155,6 +272,12 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
       {location.pathname.startsWith('/explore/')? <><ButtonFollow azurirajPosts={azurirajPosts} setAzurirajPosts={setAzurirajPosts}  pozicija={"posts"} user_id={post.user_id}/></>: ""}
       {location.pathname.startsWith('/posts/')? <><ButtonUnfollow azurirajPosts={azurirajPosts} setAzurirajPosts={setAzurirajPosts} pozicija={"posts"} user_id={post.user_id}/></> : ""}
        
+
+      {!location.pathname.startsWith('/trial') && window.sessionStorage.user_id!=user_id &&  window.sessionStorage.user && JSON.parse(window.sessionStorage.user).role!='admin'
+      && !post.reports.some(report=>report.reporter_id==window.sessionStorage.user_id)? <><Button onClick={(e)=>addReportPost(post.user_id,post.post_id,window.sessionStorage.user_id)} variant="danger">Report</Button></>: <></>}
+
+      {!location.pathname.startsWith('/trial') && window.sessionStorage.user_id!=user_id && window.sessionStorage.user &&  JSON.parse(window.sessionStorage.user).role!='admin'
+      && post.reports.some(report=>report.reporter_id==window.sessionStorage.user_id)? <><Button  onClick={(e)=>removeReportPost(post.user_id,post.post_id,window.sessionStorage.user_id)} variant="danger" >Unreport</Button></> : <></>}
         </div>
         
         <img src={post.image_path} style={{ width: '400px', height: '400px' }} />
@@ -177,11 +300,14 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
          }).format(new Date(post.created_at))}</p>
            
           
-          <p>{`Lajkova: ${post.likes.length}`}</p>
-          <p>{`Komentara: ${post.comments.length}`}</p>
+          <p>{`Likes: ${post.likes.length}`}</p>
+          <p>{`Comments: ${post.comments.length}`}</p>
+          <p>{`Location: ${post.location}`}</p>
+          {!location.pathname.startsWith('/trial')? <>
           <Button variant="primary" onClick={handleShowDetails}>
-            Detalji
+            Details
           </Button>
+          </> : ""}
 
           {trenutnaPutanja!=='/explore' && trenutnaPutanja!=='/posts' && window.sessionStorage.user_id==user_id ?
  
@@ -210,7 +336,7 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
           <Row>
             <Col sm={3}>
               
-            <ButtonSeeProfile handleCloseDetails={handleCloseDetails} user_id={comment.commentator.user_id} name={comment.commentator.name}></ButtonSeeProfile>
+            <ButtonSeeProfile handleCloseDetails={handleCloseDetails} user_id={comment.commentator.user_id} name={comment.commentator.user_id==window.sessionStorage.user_id? "Me" :comment.commentator.name}></ButtonSeeProfile>
             
             </Col>
             
@@ -218,7 +344,13 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
   <p className="bg-light text-dark" style={{ maxWidth: '100%', wordWrap: 'break-word' }}>
     {comment.content}
   </p>
-  {comment.commentator.user_id==window.sessionStorage.user_id ? <><button className="btn btn-danger" value={JSON.stringify({ post_id: post.post_id, user_id:post.user_id ,comment_id:comment.comment_id })} onClick={(e)=>{obrisiKomentar(e)}}>Obrisi</button></> : <></>}
+  {comment.commentator.user_id==window.sessionStorage.user_id ? <><button className="btn btn-danger" value={JSON.stringify({ post_id: post.post_id, user_id:post.user_id ,comment_id:comment.comment_id })} onClick={(e)=>{obrisiKomentar(e)}}>Delete</button></> : 
+  <></>}
+  {comment.commentator.user_id!=window.sessionStorage.user_id && window.sessionStorage.user && JSON.parse(window.sessionStorage.user).role!='admin'
+ &&   !comment.reports.some(report=>report.reporter_id==window.sessionStorage.user_id) ?  <><Button onClick={(e)=>addReportComment(comment.user_id,comment.post_id,comment.comment_id,window.sessionStorage.user_id)} variant="danger">Report</Button></> : <></>}
+
+{comment.commentator.user_id!=window.sessionStorage.user_id &&   window.sessionStorage.user && JSON.parse(window.sessionStorage.user).role!='admin'
+ &&   comment.reports.some(report=>report.reporter_id==window.sessionStorage.user_id) ?  <><Button onClick={(e)=>removeReportComment(comment.user_id,comment.post_id,comment.comment_id,window.sessionStorage.user_id)} variant="danger">Unreport</Button></> : <></>}
 </Col>
           </Row>
         </div>
@@ -232,7 +364,7 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
       {post.likes.map((like) => (
         
        
-        <ButtonSeeProfile handleCloseDetails={handleCloseDetails} user_id={like.liker.user_id} name={like.liker.name}/>
+        <ButtonSeeProfile handleCloseDetails={handleCloseDetails} user_id={like.liker.user_id} name={like.liker.user_id==window.sessionStorage.user_id? "Me" :like.liker.name}/>
         
       ))}
     </div>
@@ -249,17 +381,17 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
       <Col style={{ width: '80%' }}>
         <textarea onChange={(e)=>{punjenje(e)}}
           style={{ width: '100%', height: '100px' }}  
-          placeholder="Unesi tekst"
+          placeholder="content of comment"
         />
       </Col>
       <Col>
-        <Button value={JSON.stringify({ post_id: post.post_id, user_id: post.user_id })} onClick={(e)=>{dodajKomentar(e)}} variant="primary">Pošalji</Button>
+        <Button value={JSON.stringify({ post_id: post.post_id, user_id: post.user_id })} onClick={(e)=>{dodajKomentar(e)}} variant="primary">Add comment</Button>
       </Col>
     </Row>
         
          <Row>
           <Button variant="secondary" onClick={handleCloseDetails}>
-            Zatvori
+            Close
           </Button>
           
 

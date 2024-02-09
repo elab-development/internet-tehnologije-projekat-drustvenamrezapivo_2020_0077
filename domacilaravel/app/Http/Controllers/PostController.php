@@ -25,7 +25,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderByDesc('created_at')->get();
+        $posts = Post::orderByDesc('created_at')->take(5)->get();
 
 
 
@@ -126,13 +126,13 @@ class PostController extends Controller
         $offset = ($setNumber - 1) * $postsPerSet;
 
         $query = DB::table('posts')
-            ->leftJoin('friendships', function ($join) use ($user_id) {
-                $join->on('posts.user_id', '=', 'friendships.user2_id')
-                    ->where('friendships.user1_id', '=', $user_id);
+            ->whereNotExists(function ($query) use ($user_id) {
+                $query->select(DB::raw(1))
+                    ->from('friendships')
+                    ->where('user1_id', '=', $user_id)
+                    ->whereColumn('user2_id', '=', 'posts.user_id');
             })
-            ->whereNull('friendships.user1_id')
             ->where('posts.user_id', '!=', $user_id)
-
             ->whereRaw('LOWER(posts.location) LIKE ?', ['%' . strtolower($filter) . '%'])
             ->orderBy('posts.created_at', 'desc')
             ->skip($offset)

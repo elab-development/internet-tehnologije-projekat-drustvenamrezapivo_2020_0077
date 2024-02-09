@@ -209,6 +209,7 @@ function PostsPage({renderAll,setRenderAll}) {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    background: '#F0F0F0', 
   };
 
   const paginationStyles = {
@@ -259,7 +260,7 @@ function getFilteredPosts(){
     </Form>
     </> : <></>}
 
-    <p>Trenutna širina prozora: {currentWindowWidth}px</p>
+    <h5>Trenutna širina prozora: {currentWindowWidth}px</h5>
    
     <h1>{location.pathname.startsWith('/explore') ? 'Posts o unfriends' : ''}</h1>
     <h1>{location.pathname.startsWith('/profile') ? 'Posts off profile' : ''}</h1>
@@ -284,7 +285,8 @@ function getFilteredPosts(){
       )}
     </div>
     <div>
-    <div style={{ position: 'fixed', bottom: '20px', left: '20px', zIndex: '999' }}>
+      {!location.pathname.startsWith('/trial')? <>
+      <div style={{ position: 'fixed', bottom: '20px', left: '20px', zIndex: '999' }}>
       <ul  style={paginationStyles}>
             {Array.from({ length: posts.length>=1 ? maxPages : maxPages }).map((_, index) => (
                 <li style={listItemStyles} key={index}>
@@ -295,6 +297,8 @@ function getFilteredPosts(){
             ))}
         </ul>
         </div>
+      </> : <></>}
+    
     </div>
     
   </div>

@@ -22,7 +22,7 @@ function ButtonDeletePost({user_id,post_id,renderAll,setRenderAll}) {
         })        
       }
   return (
-       <Button onClick={(e)=>{obrisiPost(e)}} variant="primary">Obrisi post</Button>
+       <Button onClick={(e)=>{obrisiPost(e)}} variant="primary">Delete post</Button>
   )
 }
  

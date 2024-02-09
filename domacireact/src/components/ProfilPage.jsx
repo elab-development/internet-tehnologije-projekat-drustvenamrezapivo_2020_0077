@@ -181,7 +181,7 @@ function ProfilPage({renderAll,setRenderAll}) {
  
                 <div>
       { user && window.sessionStorage.user_id==user.user_id? <> <Button variant="primary" onClick={handleShow}>
-        Dodaj post
+        Add post
       </Button>
  
       <Modal show={showModal} onHide={handleClose}>

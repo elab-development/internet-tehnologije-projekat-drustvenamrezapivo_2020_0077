@@ -3,6 +3,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import ButtonSeeProfile from './ButtonSeeProfile';
+import { Form } from 'react-bootstrap';
+
 
 function EditProfilPage({ulogovani,setUlogovani}) {
     let navigate=useNavigate();
@@ -164,20 +166,31 @@ function EditProfilPage({ulogovani,setUlogovani}) {
         setMojUser(newUserData);
   
     }
-    
+    const rowStyles = {
+        display: 'flex',
+        // justifyContent: 'space-between',
+        backgroundColor: '#f0f0f0',
+        padding: '20px',
+        borderRadius: '15px',
+      };
+      
+      const colStyles = {
+        borderRadius: '15px',
+        marginRight: '180px',
+      };
   return (
+    <div className="container rounded bg-white mt-5 mb-5">
     
-        <div className="container rounded bg-white mt-5 mb-5">
-            <ButtonSeeProfile user_id={window.sessionStorage.user_id} name={"return to you profil"}/>
-    <div className="row">
-        
-        <div className="col-md-3 border-right">
+
+    <div className="row" style={rowStyles}>
+    <ButtonSeeProfile user_id={window.sessionStorage.user_id} name={"Return to my profile,i dont want to change data"}/>
+        <div className="col-md-3 border-right" style={colStyles}>
             <div className="d-flex flex-column align-items-center text-center p-3 py-5"><img className="rounded-circle mt-5" width="150px" height="120px" src={ulogovani? ulogovani.picture : ""}/>
-           <label>Change picture:<input type="file" name="picture" onChange={(e)=>{handleInput(e)}} className="font-weight-bold"/></label> 
-           
+           {/* <label>Change picture:<input type="file" name="picture" onChange={(e)=>{handleInput(e)}} className="font-weight-bold"/></label>  */}
+           <label>Change picture:<Form.Control type="file" name="picture" onChange={(e)=>{handleInput(e)}} className="font-weight-bold"/></label> 
            </div>
         </div>
-        <div className="col-md-5 border-right">
+        <div className="col-md-5 border-right" style={colStyles}>
             <div className="p-3 py-5">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <h4 className="text-right">Profile Settings</h4>
@@ -189,10 +202,8 @@ function EditProfilPage({ulogovani,setUlogovani}) {
                 </div>
                 <div className="row mt-3">
                     <div className="col-md-12"><button onClick={(e)=>{najpomocnija(e)}} className="labels btn btn-danger">{!editPassword ? "I want to edit my password too" : "Better dont change password"}</button></div>
-                    {editPassword? <>  
-                    <div className="col-md-12"><label className="labels">Password</label><input  name="password"  onChange={(e)=>{handleInput(e)}}  type="password" className="form-control" placeholder="password" defaultValue=""/></div>
-                    <div className="col-md-12"><label className="labels">Repeat password</label><input name="password1" type="password" onChange={(e)=>{handleInput(e)}}  className="form-control" placeholder="repeated password" defaultValue=""/></div></> 
-                    : <></>}
+                    {editPassword? <>  <div className="col-md-12"><label className="labels">Password</label><input  name="password"  onChange={(e)=>{handleInput(e)}}  type="password" className="form-control" placeholder="password" defaultValue=""/></div>
+                    <div className="col-md-12"><label className="labels">Repeat password</label><input name="password1" type="password" onChange={(e)=>{handleInput(e)}}  className="form-control" placeholder="repeated password" defaultValue=""/></div></> : <></>}
                 
                 </div>
                 

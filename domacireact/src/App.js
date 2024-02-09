@@ -19,6 +19,8 @@ import Info from './components/Info';
 import AdminPage from './components/AdminPage';
 
 import RolePage from './components/RolePage';
+import Statistics from './components/Statistics';
+
 
 function App() {
   console.log("Izrenderovana app komponenta");
@@ -91,7 +93,14 @@ function App() {
    
      
       <Route path='/editprofile' element={<EditProfilPage setUlogovani={setUlogovani} ulogovani={ulogovani}/>}/>
-      <Route path='/' element={<NavBar logout={logout}/>}>
+      <Route path='/' element={<><NavBar logout={logout}/></>}>
+        <Route
+          index
+          element={
+            JSON.parse(window.sessionStorage.getItem('user')).role === "admin" ? <Statistics/> : <></>
+          }
+        />
+
  
         <Route path='profile/:user_id' element={<><ProfilPage renderAll={renderAll} setRenderAll={setRenderAll}></ProfilPage><PostsPage key={3}  renderAll={renderAll} setRenderAll={setRenderAll} /></>}/>
         <Route path='posts/:user_id' element={<PostsPage key={1}  />}/>

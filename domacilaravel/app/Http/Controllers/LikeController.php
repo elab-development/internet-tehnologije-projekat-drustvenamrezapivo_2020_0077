@@ -48,9 +48,9 @@ class LikeController extends Controller
 
         $validator = Validator::make($request->all(), [
 
-            'user_id' => 'required',
-            'post_id' => 'required',
-            'liker_id' => 'required',
+            'user_id' => 'required|numeric',
+            'post_id' => 'required|numeric',
+            'liker_id' => 'required|numeric',
 
         ]);
         if ($validator->fails())

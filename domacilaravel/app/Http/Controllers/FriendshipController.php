@@ -48,8 +48,8 @@ class FriendshipController extends Controller
         //
         $validator = Validator::make($request->all(), [
 
-            'user1_id' => 'required',
-            'user2_id' => 'required',
+            'user1_id' => 'required|numeric',
+            'user2_id' => 'required|numeric',
 
         ]);
         if ($validator->fails())

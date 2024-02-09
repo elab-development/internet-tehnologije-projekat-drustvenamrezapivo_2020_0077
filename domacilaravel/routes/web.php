@@ -22,3 +22,8 @@ Route::get('/', function () {
 
 Route::get('password/reset/{token}', [UserController::class, 'showResetForm']);
 Route::post('password/reset', [UserController::class, 'resetPassword']);
+
+
+Route::get('/csrf-token', function () {
+    return csrf_token();
+});

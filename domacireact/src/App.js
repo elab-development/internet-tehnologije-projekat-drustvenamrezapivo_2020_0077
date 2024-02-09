@@ -19,6 +19,7 @@ import Info from './components/Info';
 import AdminPage from './components/AdminPage';
 
 import RolePage from './components/RolePage';
+import React, { useEffect } from 'react';
 
 function App() {
   console.log("Izrenderovana app komponenta");
@@ -55,6 +56,15 @@ function App() {
     
    
   }
+
+  useEffect(() => {
+    axios.get('/sanctum/csrf-cookie').then(response => {
+      // CSRF token is now automatically included in Axios headers
+      console.log('CSRF token set up completed');
+    }).catch(error => {
+      console.error('Error fetching CSRF token', error);
+    });
+  }, []);
 
   function logout(){
     

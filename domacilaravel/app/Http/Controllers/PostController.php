@@ -235,7 +235,7 @@ class PostController extends Controller
 
         $validator = Validator::make($request->all(), [
 
-            'user_id' => 'required',
+            'user_id' => 'required|numeric',
             'content' => 'required',
             // 'image_path'=>'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -456,9 +456,9 @@ class PostController extends Controller
 
         $validator = Validator::make($request->all(), [
 
-            'user_id' => 'required',
-            'post_id' => 'required',
-            'reporter_id' => 'required',
+            'user_id' => 'required|numeric',
+            'post_id' => 'required|numeric',
+            'reporter_id' => 'required|numeric',
 
         ]);
         if ($validator->fails())
@@ -484,10 +484,10 @@ class PostController extends Controller
         //
         $validator = Validator::make($request->all(), [
 
-            'user_id' => 'required',
-            'post_id' => 'required',
-            'comment_id' => 'required',
-            'reporter_id' => 'required',
+            'user_id' => 'required|numeric',
+            'post_id' => 'required|numeric',
+            'comment_id' => 'required|numeric',
+            'reporter_id' => 'required|numeric',
 
         ]);
         if ($validator->fails())

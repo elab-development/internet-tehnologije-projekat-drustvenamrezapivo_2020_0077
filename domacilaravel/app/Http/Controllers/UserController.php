@@ -404,7 +404,7 @@ class UserController extends Controller
             //'password' => 'required|string|min:8',
             'email' => 'required|string|max:255',
             'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'user_id' => 'required',
+            'user_id' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {

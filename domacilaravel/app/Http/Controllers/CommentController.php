@@ -50,9 +50,9 @@ class CommentController extends Controller
         //
         $validator = Validator::make($request->all(), [
 
-            'user_id' => 'required',
-            'post_id' => 'required',
-            'commentator_id' => 'required',
+            'user_id' => 'required|numeric',
+            'post_id' => 'required|numeric',
+            'commentator_id' => 'required|numeric',
             'content' => 'required|string|max:255'
 
         ]);

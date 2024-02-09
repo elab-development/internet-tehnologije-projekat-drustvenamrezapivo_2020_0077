@@ -20,3 +20,19 @@
 - mogućnost brisanja neprikladnih komentara/postova
 - mogućnost dodeljivanja admin najaktivnijem korisniku
 - pregled statistike lajkova za period vremena
+# Pokretanje aplikacije
+- Najpre je potrebno pokrenuti Apache i MySQL u okviru XAMPP-a. Zatim je potrebno pokrenuti redom sledeće komande:
+- git clone https://github.com/elab-development/internet-tehnologije-projekat-drustvenamrezapivo_2020_0077.git
+- cd internet-tehnologije-projekat-drustvenamrezazapivo_2020_0077
+## Backend
+- cd domacilaravel
+- copy .env.example .env
+- u .env fajlu definisati naziv baze kao na primer DB_DATABASE=laravel
+- composer install
+- php artisan migrate
+- php artisan db:seed
+- php artisan serve
+## Frontend
+- cd domacireact
+- npm install
+- npm start

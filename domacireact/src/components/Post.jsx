@@ -332,7 +332,7 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
     <div>
       <p className="text-primary">Comments:</p>
       {post.comments.map((comment) => (
-        <div className="mb-2">
+        <div key={comment.comment_id} className="mb-2">
           <Row>
             <Col sm={3}>
               
@@ -364,7 +364,7 @@ function Post({ post,user_id,pozicija,setAzurirajPosts,azurirajPosts,renderAll,s
       {post.likes.map((like) => (
         
        
-        <ButtonSeeProfile handleCloseDetails={handleCloseDetails} user_id={like.liker.user_id} name={like.liker.user_id==window.sessionStorage.user_id? "Me" :like.liker.name}/>
+        <ButtonSeeProfile  key={like.liker.user_id} handleCloseDetails={handleCloseDetails} user_id={like.liker.user_id} name={like.liker.user_id==window.sessionStorage.user_id? "Me" :like.liker.name}/>
         
       ))}
     </div>

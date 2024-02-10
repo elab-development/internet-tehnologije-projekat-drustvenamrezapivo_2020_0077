@@ -8,7 +8,13 @@ import { useParams } from 'react-router-dom';
 import ButtonSeeProfile from './ButtonSeeProfile';
 import ButtonFollow from './ButtonFollow';
 import ButtonUnfollow from './ButtonUnfollow';
- 
+import PlacesAutocomplete from 'react-places-autocomplete';
+import {
+  geocodeByAddress,
+  geocodeByPlaceId,
+  getLatLng,
+} from 'react-places-autocomplete';
+
 function ProfilPage({renderAll,setRenderAll}) {
  
   console.log("Ponovo izrenderovana profil page");
@@ -28,6 +34,10 @@ function ProfilPage({renderAll,setRenderAll}) {
     const [content, setContent] = useState('');
     const [file, setFile] = useState(null);
     const [location, setLocation] = useState('');
+    const[coordinates, setCoordinates] = useState({
+      lat: null,
+      lng: null
+    })
  
    
  
@@ -39,6 +49,16 @@ function ProfilPage({renderAll,setRenderAll}) {
     }
     const handleFileChange = (e) => setFile(e.target.files[0]);
     const handleLocationChange = (e) => setLocation(e.target.value);
+
+    const handleSelect = async value => {
+
+      const results = await geocodeByAddress(value);
+
+      const ll = await getLatLng(results[0]);
+      
+      setLocation(value);
+      setCoordinates(ll);
+    }
    
     useEffect(()=>{
       console.log("use effect profilPage");
@@ -203,7 +223,43 @@ function ProfilPage({renderAll,setRenderAll}) {
  
             <Form.Group controlId="location">
               <Form.Label>Lokacija</Form.Label>
-              <Form.Control type="text" value={location} onChange={handleLocationChange} />
+              <PlacesAutocomplete
+      value={location}
+      onChange={setLocation}
+      onSelect={handleSelect}
+    >
+      {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+        <div>
+          <Form.Control
+            {...getInputProps({
+              placeholder: '',
+            })}
+          />
+          <div className="autocomplete-dropdown-container">
+            {loading && <div>Loading...</div>}
+            {suggestions.map(suggestion => {
+              const className = suggestion.active
+                ? 'suggestion-item--active'
+                : 'suggestion-item';
+              // Customize this style to match your form
+              const style = suggestion.active
+                ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                : { backgroundColor: '#ffffff', cursor: 'pointer' };
+              return (
+                <div
+                  {...getSuggestionItemProps(suggestion, {
+                    className,
+                    style,
+                  })}
+                >
+                  <span>{suggestion.description}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </PlacesAutocomplete>
             </Form.Group>
           </Form>
         </Modal.Body>

@@ -14,7 +14,7 @@ const mockPost = {
       {
         liker: {
             user_id: "1",
-            // Other properties...
+          
           },
         user_id: "1",
         post_id: "1",

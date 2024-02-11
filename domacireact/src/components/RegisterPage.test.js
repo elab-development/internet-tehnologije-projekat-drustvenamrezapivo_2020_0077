@@ -1,15 +1,15 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import { MemoryRouter } from 'react-router-dom';
-import RegisterPage from './RegisterPage'; // Adjust the import path as necessary
+import RegisterPage from './RegisterPage';
 
-// Mocking axios
+
 jest.mock('axios');
 
-// Mocking useNavigate
+
 jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'), // Import and re-export all
-  useNavigate: () => jest.fn(), // Mock useNavigate
+  ...jest.requireActual('react-router-dom'), 
+  useNavigate: () => jest.fn(), 
 }));
 
 describe('RegisterPage', () => {
@@ -20,7 +20,7 @@ describe('RegisterPage', () => {
         </MemoryRouter>
       );
   
-      // Simulate user input
+    
       fireEvent.input(screen.getByLabelText('Your Userame'), {
         target: { value: 'testuser' },
       });
@@ -34,7 +34,7 @@ describe('RegisterPage', () => {
         target: { value: 'password123' },
       });
   
-      // Assert values were updated
+    
       expect(screen.getByLabelText('Your Userame').value).toBe('testuser');
       expect(screen.getByLabelText('Your Email').value).toBe('test@example.com');
       expect(screen.getByLabelText('Password').value).toBe('password123');
@@ -42,7 +42,7 @@ describe('RegisterPage', () => {
     });
   
     it('handles registration with matching passwords', async () => {
-      axios.post.mockResolvedValue({ data: { success: true } }); // Mock successful registration
+      axios.post.mockResolvedValue({ data: { success: true } }); 
   
       render(
         <MemoryRouter>
@@ -50,7 +50,7 @@ describe('RegisterPage', () => {
         </MemoryRouter>
       );
   
-      // Fill out and submit the form
+      
       fireEvent.input(screen.getByLabelText('Your Userame'), {
         target: { value: 'testuser' },
       });
@@ -65,7 +65,7 @@ describe('RegisterPage', () => {
       });
       fireEvent.submit(screen.getByText('Register'));
   
-      // Wait for the API call to resolve and check if navigation was called
+      
       await waitFor(() => {
         expect(axios.post).toHaveBeenCalledWith("api/register", {
           email: "test@example.com",

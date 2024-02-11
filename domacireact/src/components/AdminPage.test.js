@@ -4,18 +4,18 @@ import '@testing-library/jest-dom';
 import AdminPage from './AdminPage'; // Adjust the import path as necessary
 import axios from 'axios';
 
-// Automatically mock axios
+
 jest.mock('axios');
 
 describe('AdminPage Tests', () => {
   beforeEach(() => {
-    // Clear all mock settings before each test
+  
     axios.get.mockClear();
     axios.delete.mockClear();
   });
 
   test('renders admin page and fetches data', async () => {
-    // Setup mock response for get request
+  
     axios.get.mockResolvedValue({
         data: {
           posts: [
@@ -43,7 +43,7 @@ describe('AdminPage Tests', () => {
 
     render(<AdminPage />);
 
-    // Verify that data is correctly fetched and rendered
+   
     await waitFor(() => {
       expect(screen.getByText(/Offensive post content/)).toBeInTheDocument();
       expect(screen.getByText(/Offensive comment content/)).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('AdminPage Tests', () => {
   });
 
   test('handles delete post functionality', async () => {
-    // Assume there is one post and one comment in the mock response
+    
     axios.get.mockResolvedValueOnce(/* same as above */);
     axios.delete.mockResolvedValue({});
 
@@ -64,5 +64,5 @@ describe('AdminPage Tests', () => {
    
   });
 
-  // Add more tests as needed...
+ 
 });

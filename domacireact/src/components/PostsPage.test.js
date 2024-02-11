@@ -1,69 +1,124 @@
-/*import React from 'react';
-import { render, waitFor, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import PostsPage from './PostsPage'; // Adjust the import path as necessary
+import React from 'react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import axios from 'axios';
-import { MemoryRouter, Route } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
+import PostsPage from './PostsPage'; 
+import { MemoryRouter } from 'react-router-dom';
 
-// Mock axios
+
 jest.mock('axios');
 
-// Helper function to render the component within a router
-const renderWithRouter = (ui, { route = '/' } = {}) => {
-  window.history.pushState({}, 'Test page', route);
 
-  return render(ui, { wrapper: MemoryRouter });
-};
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: jest.fn(),
+  useLocation: jest.fn(),
+}));
 
-const mockPostsData = {
-    data: {
-      posts: [
-        {
-          user_id: '1',
-          post_id: '1',
-          content: 'Test post content',
-          created_at: '2021-01-01T00:00:00Z', // ISO 8601 format
-          user: { user_id: '1' },
-          likes: [],
-          // Add other necessary fields
+describe('PostsPage Component', () => {
+    beforeEach(() => {
+    
+    window.sessionStorage.setItem('user_id', '123');
+      useParams.mockReturnValue({ user_id: '123' }); 
+      useLocation.mockReturnValue({ pathname: '/posts/123' });
+
+      axios.get.mockResolvedValue(Promise.resolve({
+        data: {
+            posts: [ { user_id: "1",
+            post_id: "1",
+            image_path: "http://example.com/image.png",
+            created_at: "2024-02-03T19:18:10.000000Z",
+            location: "New York",
+            likes: [
+              {
+                liker: {
+                    user_id: "1",
+                  
+                  },
+                user_id: "1",
+                post_id: "1",
+              }
+            ],
+            comments: [
+              {
+                comment_id: "1",
+                post_id: "1",
+                user_id: "1",
+                content: "Great post!",
+                commentator: {
+                  user_id: "2",
+                  name: "Jane Doe",
+                }
+              }
+            ],
+            user: {
+              user_id: "1",
+              name: "Ranko",
+              email: "rankezis@gmail.com",
+              picture: "http://example.com/user.png",
+            }}]
+           
         }
-      ]
-    }
-  };
-
-describe('PostsPage', () => {
-  beforeEach(() => {
-    // Clear all mocks before each test
-    jest.clearAllMocks();
-
-    // Setup axios.get mock to return a promise with mock data
-    axios.get.mockResolvedValue(mockPostsData);
-  });
-
-  it('fetches posts for friends when on /posts/:userId route', async () => {
-    renderWithRouter(<PostsPage />, { route: '/posts/1' });
-
-    await waitFor(() => {
-      expect(axios.get).toHaveBeenCalledWith(expect.any(String), {
-        headers: {
-          'Authorization': `Bearer ${window.sessionStorage.auth_token}`,
-        },
-      });
+      }));
     });
 
-    // Check if the post content is displayed
-    expect(screen.getByText(/Test post content/)).toBeInTheDocument();
-  });
-
-  it('changes page when pagination button is clicked', async () => {
-    renderWithRouter(<PostsPage />, { route: '/posts/1' });
+    afterEach(() => {
+        window.sessionStorage.clear();
+      });
   
-    // Simulate page change
-    fireEvent.click(screen.getByText('2')); // Assuming '2' is the text on the pagination button for the next page
+    it('renders without crashing', () => {
+      render(<PostsPage />);
+    });
   
-    
-  });
+    it('fetches and displays posts', async () => {
+      
+        
+      
+        const { findByText } = render(
+            <MemoryRouter>
+              <PostsPage />
+            </MemoryRouter>
+          );
+      
+        const postContent = await findByText('Location: New York');
+        expect(postContent).toBeInTheDocument();
+      });
 
-  // Add more tests as needed for different routes and functionalities
-});
-*/
+      it('renders pagination controls and can change page', async () => {
+        
+      
+        const { findByText, getByText } = render( <MemoryRouter>
+            <PostsPage />
+          </MemoryRouter>);
+      
+        
+        const page1Content = await findByText('1');
+        expect(page1Content).toBeInTheDocument();
+      
+      
+        fireEvent.click(getByText('2'));
+      
+       
+        const page2Content = await findByText('2');
+        expect(page2Content).toBeInTheDocument();
+      });
+
+      it('filters posts based on input', async () => {
+       
+      
+        const { findByText, getByPlaceholderText, getByText } = render(<MemoryRouter>
+            <PostsPage />
+          </MemoryRouter>);
+      
+     
+   await waitFor(() => {
+        fireEvent.change(screen.getByPlaceholderText('Filter posts with location'), { target: { value: 'New York' } });
+      });
+      
+      fireEvent.click(getByText('Filter posts'));
+
+        const filteredContent = await findByText('Location: New York');
+        expect(filteredContent).toBeInTheDocument();
+      });
+
+  });

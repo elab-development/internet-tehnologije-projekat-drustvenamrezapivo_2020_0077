@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react';
 import ButtonSeeProfile from './ButtonSeeProfile';
 import { BrowserRouter } from 'react-router-dom';
 
-// Mock useNavigate and useLocation from 'react-router-dom'
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => jest.fn(),
@@ -21,8 +21,6 @@ describe('ButtonSeeProfile', () => {
     );
 
     fireEvent.click(getByText(/see profile/i));
-    // Normally we would assert navigation here, but since we can't actually
-    // test navigation using RTL without a custom history object or additional
-    // mocking, this is left as an example.
+   
   });
 });

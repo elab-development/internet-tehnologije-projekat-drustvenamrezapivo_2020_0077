@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import axios from 'axios';
-import RolePage from './RolePage'; // Adjust the import path as necessary
+import RolePage from './RolePage'; 
 import '@testing-library/jest-dom';
 
-// Mock axios
+
 jest.mock('axios');
 
 describe('RolePage', () => {
@@ -14,9 +14,9 @@ describe('RolePage', () => {
   ];
 
   beforeEach(() => {
-    // Setup mock response for fetching users
+    
     axios.get.mockResolvedValue({ data: { users: mockUsers } });
-    // Clear mock history for axios.put between tests
+    
     axios.put.mockClear();
   });
 
@@ -38,8 +38,8 @@ describe('RolePage', () => {
   });
 
   test('calls setAdmin function when "Give him/her admin" button is clicked', async () => {
-    window.sessionStorage.setItem('user_id', '1'); // Set a dummy user ID
-    axios.put.mockResolvedValue({}); // Mock the axios.put call
+    window.sessionStorage.setItem('user_id', '1'); 
+    axios.put.mockResolvedValue({}); 
 
     render(<RolePage />);
     await waitFor(() => {

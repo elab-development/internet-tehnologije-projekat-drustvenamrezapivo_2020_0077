@@ -1,16 +1,16 @@
-// At the top of your test file
+
 import { render, screen, fireEvent } from '@testing-library/react';
 import axios from 'axios';
 import { MemoryRouter } from 'react-router-dom';
 import EditProfilPage from './EditProfilPage';
 
-// Mocking axios
+
 jest.mock('axios');
 
-// Mocking useNavigate
+
 jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'), // preserve other exports
-  useNavigate: () => jest.fn(), // mock useNavigate
+  ...jest.requireActual('react-router-dom'), 
+  useNavigate: () => jest.fn(), 
 }));
 
 describe('EditProfilPage', () => {
@@ -29,7 +29,7 @@ describe('EditProfilPage', () => {
         </MemoryRouter>
       );
   
-      // Check if inputs are rendered and can be updated
+     
       const usernameInput = screen.getByPlaceholderText('first name');
       expect(usernameInput.value).toBe(mockUlogovani.name);
       fireEvent.change(usernameInput, { target: { value: 'Updated Name' } });
@@ -40,8 +40,8 @@ describe('EditProfilPage', () => {
       fireEvent.change(emailInput, { target: { value: 'updated@example.com' } });
       expect(emailInput.value).toBe('updated@example.com');
   
-      // Add more assertions as necessary for other inputs
+     
     });
   
-    // More tests for button clicks, form submission, conditional rendering based on state, etc.
+    
   });

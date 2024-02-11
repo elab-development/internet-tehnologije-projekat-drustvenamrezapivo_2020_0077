@@ -262,8 +262,8 @@ function getFilteredPosts(){
 
     <h5>Trenutna širina prozora: {currentWindowWidth}px</h5>
    
-    <h1>{location.pathname.startsWith('/explore') ? 'Posts o unfriends' : ''}</h1>
-    <h1>{location.pathname.startsWith('/profile') ? 'Posts off profile' : ''}</h1>
+    <h1>{location.pathname.startsWith('/explore') ? 'Posts of non-friends' : ''}</h1>
+    <h1>{location.pathname.startsWith('/profile') ? 'Posts of profile' : ''}</h1>
     <h1>{location.pathname.startsWith('/posts') ? 'Posts of friends' : ''}</h1>
     <div style={postContainerStyle} >
       {posts ? (
